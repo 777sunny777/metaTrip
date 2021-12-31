@@ -2,14 +2,14 @@
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
     <channel>
         <title>MetaTrip Blog</title>
-        <link> https://777sunny777.github.io/metaTrip/blog</link>
+        <link> https://777sunny777.github.io/metaTrip/metaTrip/build/blog</link>
         <description>MetaTrip Blog</description>
         <lastBuildDate>Sat, 01 Jan 2022 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <item>
             <title><![CDATA[Storybook]]></title>
-            <link> https://777sunny777.github.io/metaTrip/blog/storybook-usage</link>
+            <link> https://777sunny777.github.io/metaTrip/metaTrip/build/blog/storybook-usage</link>
             <guid>storybook-usage</guid>
             <pubDate>Sat, 01 Jan 2022 00:00:00 GMT</pubDate>
             <description><![CDATA[Storybook is an open source tool for building UI components and pages in isolation. It streamlines UI development, testing, and documentation.]]></description>

@@ -1,4 +1,5 @@
 plan.txt
 .docusaurus/
+.vscode/
 node_modules/
 

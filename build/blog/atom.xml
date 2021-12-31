@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id> https://777sunny777.github.io/metaTrip/blog</id>
+    <id> https://777sunny777.github.io/metaTrip/metaTrip/build/blog</id>
     <title>MetaTrip Blog</title>
     <updated>2022-01-01T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href=" https://777sunny777.github.io/metaTrip/blog"/>
+    <link rel="alternate" href=" https://777sunny777.github.io/metaTrip/metaTrip/build/blog"/>
     <subtitle>MetaTrip Blog</subtitle>
-    <icon> https://777sunny777.github.io/metaTrip/img/metaIcon.png</icon>
+    <icon> https://777sunny777.github.io/metaTrip/metaTrip/build/img/metaIcon.png</icon>
     <entry>
         <title type="html"><![CDATA[Storybook]]></title>
         <id>storybook-usage</id>
-        <link href=" https://777sunny777.github.io/metaTrip/blog/storybook-usage"/>
+        <link href=" https://777sunny777.github.io/metaTrip/metaTrip/build/blog/storybook-usage"/>
         <updated>2022-01-01T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[Storybook is an open source tool for building UI components and pages in isolation. It streamlines UI development, testing, and documentation.]]></summary>
         <content type="html"><![CDATA[<p><a href="https://storybook.js.org/">Storybook</a> is an open source tool for building UI components and pages in isolation. It streamlines UI development, testing, and documentation.</p><p>:::note</p><ul><li>version: v6.4.9(Currently) and <a href="https://github.com/storybookjs/storybook/releases">Latest</a>

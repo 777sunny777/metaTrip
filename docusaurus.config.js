@@ -9,7 +9,7 @@ const config = {
   title: 'MetaTrip',
   tagline: 'Based on Dinosaurs',
   url: ' https://777sunny777.github.io/metaTrip/',
-  baseUrl: '/',
+  baseUrl: '/metaTrip/build/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/metaIcon.png',
