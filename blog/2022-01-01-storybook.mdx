@@ -5,9 +5,167 @@ authors: [sheldon]
 tags: [storybook, react]
 ---
 
+:::tip
+- 这篇blog是storybook的入门教程并且包含了我使用storybook 3年多的一些体验 
+- 只针对React项目
+- 进一步学习，请访问[Storybook官网](https://storybook.js.org/)
+:::
+
 [Storybook](https://storybook.js.org/) is an open source tool for building UI components and pages in isolation. It streamlines UI development, testing, and documentation.
+
+从Storybook的官方描述来看，他是用于快速构建UI demo的工具，可以帮用户快速构建页面；并且有很好的语法功能，轻松书写demo；还有很好的辅助插件，
+比如demo的文档辅助，参数辅助，还有accessibility辅助测试等等。这一切几乎促使它成为了项目demo的最好选择。因为我的项目涉及到组件库的开发，
+所以storybook就更显得合适和重要。
 
 :::note
 - version: v6.4.9(Currently) and [Latest](https://github.com/storybookjs/storybook/releases)
 :::
+
+Storybook 代码库更新很活跃，几乎一年一次major版本的更新，总会带来些新的功能，这篇blog我们那目前最新版本v6.4.9 为例进行说明
+
+## 1. 安装
+
+Storybook 的[安装](https://storybook.js.org/docs/react/get-started/install)很智能，npx sb init 就可以直接进行安装，但是要注意的是安装之前你必须已经有项目框架的依赖。
+
+:::note
+- Storybook will look into your project's dependencies during its install process and provide you with the best configuration available.
+- Storybook只是需要项目框架依赖，比如react就相当于一个标识，你不需要写任何框架代码在项目中
+:::
+
+
+## 2. Write stories
+
+Story就是一个demo case，stories file就是存放一类demo cases的集合，这些cases根据title分成不同的类型
+
+```jsx
+// 这个一个展示button的stories file
+// Button.stories.js|jsx
+
+import React from 'react';
+
+import { Button } from './Button';
+
+export default {
+  
+  // title是这个集合的名称，同时也用于storybook 导航栏的结构
+  // 比如可以有层级关系，'Button/Responsive'
+
+  title: 'Button',
+  
+  // component 属性可以不写, 后面解释文档的时候再详细说
+  // Storybook uses the component key in the story file’s default export to extract the component's description and props.
+  
+  component: Button,
+};
+
+// 这里通过export导出就生成了一个demo case page
+// 路径就是左侧导航栏中 Button下面的Primary
+
+export const Primary = () => <Button primary>Button</Button>;
+
+// 这里可以改变case的命名，默认是function name
+Primary.storyName = 'I am the primary';
+
+export const Secondary = () => <Button backgroundColor="#ff0" label="😄👍😍💯" />;
+export const Tertiary = () => <Button backgroundColor="#ff0" label="📚📕📈🤓" />;
+
+```
+
+### 2-1 Using args
+
+使用args是最新版本中storybook 比较建议的写法，主要的优点是减少重复代码，用法上也比较有章可循，便于管理。
+不过根据我的经验还是要看你用storybook的target是什么，如果只是for show UI demo，使用args 的方式是可行的。
+但是比如做组件库，show UI demo只是一个方面，show demo code for users 也是很重要的一点，我们希望通过storybook的cases可以让用户
+直观的明白demo 要怎么写，甚至只需要他copy/paste就可以。在这种情况下，我们就需要尽量少的使用storybook提供的一些接口方法，减少storybook
+对你的demo case code 的干扰。
+
+任何时候，我们都要明白用户关心的是什么？而不是盲目的求新求变。
+
+```jsx
+import React from 'react';
+import { Button } from './Button';
+
+export default {
+  title: 'Button',
+  component: Button,
+};
+
+//👇 We create a “template” of how args map to rendering
+const Template = (args) => <Button {...args} />;
+
+// 👇 Each story then reuses that template
+export const Primary = Template.bind({});
+Primary.args = { background: '#ff0', label: 'Button' };
+
+export const Secondary = Template.bind({});
+Secondary.args = { ...Primary.args, label: '😄👍😍💯' };
+
+export const Tertiary = Template.bind({});
+Tertiary.args = { ...Primary.args, label: '📚📕📈🤓' };
+```
+
+### 2-2 Remix two stories
+
+Story是可以相互引用的，主要也是为了减少重复代码，保持一致性。
+
+```jsx
+import React from 'react';
+import { Button } from './Button';
+import * as TextInputStories from './TextInput.stories';
+
+export default {
+  title: 'Button',
+  component: Button,
+};
+
+export const TestRemix = () => <>
+  <TextInputStories.Default />
+  <Button primary>Button</Button>
+<>
+
+```
+
+
+### 2-3 Controls
+
+首先Control是很好的功能，对于show UI demo 是很方便直观的展示，对于V6版本，Control 是内置插件，只需要通过Template和args配合就可以自动生成
+
+[详细写法](https://storybook.js.org/docs/react/essentials/controls)
+
+在低版本中(V6仍然支持addons写法)，是通过安装addon-knobs插件来实现的。 
+
+<video autoplay="" muted="" playsinline="" loop="">
+    <source src="https://storybook.js.org/9d2e1f29cfb010e3aae6cd76547c4bab/addon-controls-optimized.mp4" type="video/mp4">
+</video>
+
+根据我的经验，和using args 一样，使用还是不使用需要根据项目需求，或者寻找折中的方法而两者兼顾。
+
+
+### 2-4 Action
+
+我目前还没有找到Action的合适场景。它和Control一样的，在V6版本中是内置插件，需要argTypes来定义，新版本中需要写成template形式才能触发。
+
+<video autoplay="" muted="" playsinline="" loop="">
+    <source src="https://storybook.js.org/b0366940cf7195b6d5b646c6105c217c/addon-actions-optimized.mp4" type="video/mp4">
+</video>
+
+```jsx
+import { Button } from './Button';
+
+export default {
+  title: 'Button',
+  component: Button,
+  argTypes: { onClick: { action: 'clicked' } },
+};
+
+```
+
+```jsx
+// .storybook/preview.js
+
+export const parameters = {
+  actions: { argTypesRegex: '^on.*' }
+}
+
+```
 
