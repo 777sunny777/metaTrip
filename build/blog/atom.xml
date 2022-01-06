@@ -2,19 +2,180 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id> https://777sunny777.github.io/metaTrip/metaTrip/build/blog</id>
     <title>MetaTrip Blog</title>
-    <updated>2022-01-01T00:00:00.000Z</updated>
+    <updated>2022-01-06T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href=" https://777sunny777.github.io/metaTrip/metaTrip/build/blog"/>
     <subtitle>MetaTrip Blog</subtitle>
     <icon> https://777sunny777.github.io/metaTrip/metaTrip/build/img/metaIcon.png</icon>
     <entry>
-        <title type="html"><![CDATA[Storybook]]></title>
+        <title type="html"><![CDATA[基金基础(一)]]></title>
+        <id>funding-basic</id>
+        <link href=" https://777sunny777.github.io/metaTrip/metaTrip/build/blog/funding-basic"/>
+        <updated>2022-01-06T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[- From 《指数基金投资指南》章节1，2]]></summary>
+        <content type="html"><![CDATA[<p>:::tip</p><ul><li>From 《指数基金投资指南》章节1，2</li><li>小白学习，切勿盲目跟从
+:::</li></ul><h2>资产</h2><ul><li>能够为我们”生钱“的就是资产，<strong>现金</strong>不是资产</li><li>资产分为能够产生现金流的资产和不能产生现金流的资产</li></ul><blockquote><p>比如银行理财一个5%，一个3%，另一个是农村合作社的5%， 这些都是可以产生现金流的资产，他的价格取决于现金流的大小和稳定性。
+银行的稳定性高于农村合作社，5%高于3%，你就很容易知道哪个资产更优质</p></blockquote><blockquote><p>不能产生现金流的资产，他的价格主要取决于供求关系，比如乱世黄金，特殊时期下供需关系发生改变，才会更值钱。</p></blockquote><blockquote><p>能产生现金流的资产通常比不能产生现金流的资产，<strong>长期收益率更高</strong>。黄金的长期收益率甚至低于国债。</p></blockquote><h2>指数</h2><ul><li>指数是一个选股规则，他的目的是按照某个规则挑选出一篮子股票，并反应这一篮子股票的<strong>平均价格走势</strong>。</li></ul><blockquote><p>例如沪深300指数，是由上海和深圳证券市场中选取300只A股作为样本编制而成的成分股指数，我们只需要看下沪深300指数，
+就可以知道国内最大的300只股票，今天是整体涨了还是跌了。</p></blockquote><ul><li><p>指数点数，是指数背后公司的平均股价，这个点数下跌或上涨，代表指数背后公司股价的下跌或上涨，长期来看，指数点数是<strong>不断上涨的</strong></p></li><li><p>指数基金就是基金公司开发一个基金产品。也是完全按照指数的规则去选股，因为指数基金持有的股票种类，数量，比例都和指数非常接近，
+所以指数基金的表现也和指数也非常接近，也就是说指数基金把指数的抽象概念变成了实际的产品。</p></li></ul><blockquote><p>指数基金的三个特点：长生不老，产期上涨，成本低。</p></blockquote>]]></content>
+        <author>
+            <name>Sheldon Y Sun</name>
+            <uri>https://github.com/777sunny777</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[How to use Storybook]]></title>
         <id>storybook-usage</id>
         <link href=" https://777sunny777.github.io/metaTrip/metaTrip/build/blog/storybook-usage"/>
         <updated>2022-01-01T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[Storybook is an open source tool for building UI components and pages in isolation. It streamlines UI development, testing, and documentation.]]></summary>
-        <content type="html"><![CDATA[<p><a href="https://storybook.js.org/">Storybook</a> is an open source tool for building UI components and pages in isolation. It streamlines UI development, testing, and documentation.</p><p>:::note</p><ul><li>version: v6.4.9(Currently) and <a href="https://github.com/storybookjs/storybook/releases">Latest</a>
-:::</li></ul>]]></content>
+        <summary type="html"><![CDATA[- 这篇blog是storybook的入门教程并且包含了我使用storybook 3年多的一些体验]]></summary>
+        <content type="html"><![CDATA[<p>:::tip</p><ul><li>这篇blog是storybook的入门教程并且包含了我使用storybook 3年多的一些体验 </li><li>只针对React项目</li><li>进一步学习，请访问<a href="https://storybook.js.org/">Storybook官网</a>
+:::</li></ul><p><a href="https://storybook.js.org/">Storybook</a> is an open source tool for building UI components and pages in isolation. It streamlines UI development, testing, and documentation.</p><p>从Storybook的官方描述来看，他是用于快速构建UI demo的工具，可以帮用户快速构建页面；并且有很好的语法功能，轻松书写demo；还有很好的辅助插件，
+比如demo的文档辅助，参数辅助，还有accessibility辅助测试等等。这一切几乎促使它成为了项目demo的最好选择。因为我的项目涉及到组件库的开发，
+所以storybook就更显得合适和重要。</p><p>:::note</p><ul><li>version: v6.4.9(Currently) and <a href="https://github.com/storybookjs/storybook/releases">Latest</a>
+:::</li></ul><p>Storybook 代码库更新很活跃，几乎一年一次major版本的更新，总会带来些新的功能，这篇blog我们那目前最新版本v6.4.9 为例进行说明</p><h2>1. 安装</h2><p>Storybook 的<a href="https://storybook.js.org/docs/react/get-started/install">安装</a>很智能，npx sb init 就可以直接进行安装，但是要注意的是安装之前你必须已经有项目框架的依赖。</p><p>:::note</p><ul><li>Storybook will look into your project&#x27;s dependencies during its install process and provide you with the best configuration available.</li><li>Storybook只是需要项目框架依赖，比如react就相当于一个标识，你不需要写任何框架代码在项目中
+:::</li></ul><h2>2. Write stories</h2><p>Story就是一个demo case，stories file就是存放一类demo cases的集合，这些cases根据title分成不同的类型</p><pre><code class="language-jsx">// 这个一个展示button的stories file
+// Button.stories.js|jsx
+
+import React from &#x27;react&#x27;;
+
+import { Button } from &#x27;./Button&#x27;;
+
+export default {
+  
+  // title是这个集合的名称，同时也用于storybook 导航栏的结构
+  // 比如可以有层级关系，&#x27;Button/Responsive&#x27;
+
+  title: &#x27;Button&#x27;,
+  
+  // component 属性可以不写, 后面解释文档的时候再详细说
+  // Storybook uses the component key in the story file’s default export to extract the component&#x27;s description and props.
+  
+  component: Button,
+};
+
+// 这里通过export导出就生成了一个demo case page
+// 路径就是左侧导航栏中 Button下面的Primary
+
+export const Primary = () =&gt; &lt;Button primary&gt;Button&lt;/Button&gt;;
+
+// 这里可以改变case的命名，默认是function name
+Primary.storyName = &#x27;I am the primary&#x27;;
+
+export const Secondary = () =&gt; &lt;Button backgroundColor=&quot;#ff0&quot; label=&quot;😄👍😍💯&quot; /&gt;;
+export const Tertiary = () =&gt; &lt;Button backgroundColor=&quot;#ff0&quot; label=&quot;📚📕📈🤓&quot; /&gt;;
+
+</code></pre><h3>2-1 Using args</h3><p>使用args是最新版本中storybook 比较建议的写法，主要的优点是减少重复代码，用法上也比较有章可循，便于管理。
+不过根据我的经验还是要看你用storybook的target是什么，如果只是for show UI demo，使用args 的方式是可行的。
+但是比如做组件库，show UI demo只是一个方面，show demo code for users 也是很重要的一点，我们希望通过storybook的cases可以让用户
+直观的明白demo 要怎么写，甚至只需要他copy/paste就可以。在这种情况下，我们就需要尽量少的使用storybook提供的一些接口方法，减少storybook
+对你的demo case code 的干扰。</p><p>任何时候，我们都要明白用户关心的是什么？而不是盲目的求新求变。</p><pre><code class="language-jsx">import React from &#x27;react&#x27;;
+import { Button } from &#x27;./Button&#x27;;
+
+export default {
+  title: &#x27;Button&#x27;,
+  component: Button,
+};
+
+//👇 We create a “template” of how args map to rendering
+const Template = (args) =&gt; &lt;Button {...args} /&gt;;
+
+// 👇 Each story then reuses that template
+export const Primary = Template.bind({});
+Primary.args = { background: &#x27;#ff0&#x27;, label: &#x27;Button&#x27; };
+
+export const Secondary = Template.bind({});
+Secondary.args = { ...Primary.args, label: &#x27;😄👍😍💯&#x27; };
+
+export const Tertiary = Template.bind({});
+Tertiary.args = { ...Primary.args, label: &#x27;📚📕📈🤓&#x27; };
+</code></pre><h3>2-2 Remix two stories</h3><p>Story是可以相互引用的，主要也是为了减少重复代码，保持一致性。</p><pre><code class="language-jsx">import React from &#x27;react&#x27;;
+import { Button } from &#x27;./Button&#x27;;
+import * as TextInputStories from &#x27;./TextInput.stories&#x27;;
+
+export default {
+  title: &#x27;Button&#x27;,
+  component: Button,
+};
+
+export const TestRemix = () =&gt; &lt;&gt;
+  &lt;TextInputStories.Default /&gt;
+  &lt;Button primary&gt;Button&lt;/Button&gt;
+&lt;&gt;
+
+</code></pre><h3>2-3 Controls</h3><p>首先Control是很好的功能，对于show UI demo 是很方便直观的展示，对于V6版本，Control 是内置插件，只需要通过Template和args配合就可以自动生成</p><p><a href="https://storybook.js.org/docs/react/essentials/controls">详细写法</a></p><p>在低版本中(V6仍然支持addons写法)，是通过安装addon-knobs插件来实现的。 </p><video controls="" autoplay="autoplay" loop="" style="width:100%"><source src="https://storybook.js.org/9d2e1f29cfb010e3aae6cd76547c4bab/addon-controls-optimized.mp4" type="video/mp4"/></video><p>根据我的经验，和using args 一样，使用还是不使用需要根据项目需求，或者寻找折中的方法而两者兼顾。</p><h3>2-4 Action</h3><p>我目前还没有找到Action的合适场景。它和Control一样的，在V6版本中是内置插件，需要argTypes来定义，新版本V6中需要写成template形式才能触发。</p><video controls="" autoplay="autoplay" loop="" style="width:100%"><source src="https://storybook.js.org/b0366940cf7195b6d5b646c6105c217c/addon-actions-optimized.mp4" type="video/mp4"/></video><pre><code class="language-jsx">import { Button } from &#x27;./Button&#x27;;
+
+export default {
+  title: &#x27;Button&#x27;,
+  component: Button,
+  argTypes: { onClick: { action: &#x27;clicked&#x27; } },
+};
+
+</code></pre><pre><code class="language-jsx">// .storybook/preview.js
+
+export const parameters = {
+  actions: { argTypesRegex: &#x27;^on.*&#x27; }
+}
+
+</code></pre><h3>2-5 Using parameters</h3><p>Parameters are Storybook’s method of defining static metadata for stories.
+A story’s parameters can be used to provide configuration to various addons at the level of a story or group of stories.</p><p>Parameters主要是为stories做一些页面配置, 也可以在preview中进行global的配置</p><pre><code class="language-jsx">  parameters: {
+    docs: { page: null },
+    actions: { argTypesRegex: &#x27;^on.*&#x27; },
+    centered: { disable: true },
+    backgrounds: {
+      values: [
+        { name: &#x27;red&#x27;, value: &#x27;#f00&#x27; },
+        { name: &#x27;green&#x27;, value: &#x27;#0f0&#x27; },
+        { name: &#x27;blue&#x27;, value: &#x27;#00f&#x27; },
+      ],
+    },
+  },
+</code></pre><h3>2-6 Using decorators</h3><p>Decorators are a mechanism to wrap a component in arbitrary markup when rendering a story.
+Components are often created with assumptions about ‘where’ they render.
+Your styles might expect a theme or layout wrapper, or your UI might expect specific context or data providers.</p><p>decorators就是页面装饰，可以有机会给页面做一些dom结构或者样式的调整</p><pre><code class="language-jsx">import React from &#x27;react&#x27;;
+import { Button } from &#x27;./Button&#x27;;
+
+export default {
+  title: &#x27;Button&#x27;,
+  component: Button,
+  decorators: [
+    (Story) =&gt; (
+      &lt;div style={{ margin: &#x27;3em&#x27; }}&gt;
+        &lt;Story /&gt;
+      &lt;/div&gt;
+    ),
+  ],
+};
+</code></pre><h2>3. Write Docs</h2><p>Storybook 目前主要提供了三种方式用于文档的书写</p><h3>3-1 利用component parameters</h3><h4>优点：</h4><ul><li>可以自动解析组件中的props</li></ul><h4>缺点：</h4><ul><li>interface的format要严格</li><li>docs中不能自定义，是自动生成的</li></ul><pre><code class="language-jsx">// ButtonGroup.stories.js|jsx
+import React from &#x27;react&#x27;;
+import { Button, ButtonGroup } from &#x27;./ButtonGroup&#x27;;
+
+export default {
+  title: &#x27;ButtonGroup&#x27;,
+  // storybook use the component/subcomponents to extract the component&#x27;s description and props
+  // override the docs.page parameters with null to remove its content
+  component: ButtonGroup,
+  subcomponents: { Button },
+};
+</code></pre><h3>3-2 mdx</h3><p>:::note</p><ul><li>Currently there&#x27;s an issue when using MDX stories with IE11. This issue does not apply to Docs page
+:::</li></ul><p>MDX 是非常好的书写docs的方式，如果你的项目不需要兼容IE11，我强烈建议你用mdx的方式来写case的文档。</p><h4>优点：</h4><ul><li>可以将md和JSX混合书写，非常灵活</li></ul><h4>缺点：</h4><ul><li>不支持IE11</li></ul><p><a href="https://storybook.js.org/docs/react/writing-docs/mdx">详细</a></p><p>MDX is a standard file format that combines Markdown with JSX.
+It means you can use Markdown’s terse syntax (such as # heading) for your documentation,
+write stories that compile to our component story format, and freely embed JSX component blocks at any point in the file. All at once.</p><h3>3-3 利用docs parameters</h3><p>因为IE11而用不了mdx，可以尝试用jsx组件配置到docs.page的方式进行docs的书写。个人认为，如果你的项目支持IE11，而且你还希望自定义docs内容，
+用这种方式是最好选择</p><h4>优点：</h4><ul><li>可以写JSX，自定义docs页面布局样式</li><li>支持IE11</li></ul><h4>缺点：</h4><ul><li>不能用md</li></ul><pre><code class="language-jsx">// ButtonGroup.stories.js|jsx
+import React from &#x27;react&#x27;;
+import { Button, ButtonGroup } from &#x27;./ButtonGroup&#x27;;
+import { customDocumentComponemt } from &#x27;./customDocumentComponemt&#x27;; //jsx file
+
+export default {
+  title: &#x27;ButtonGroup&#x27;,
+  component: ButtonGroup,
+  parameters: {
+    docs: {
+      page: customDocumentComponemt
+    }
+  }
+};
+</code></pre><h2>4. Configure</h2><p>Storybook is configured via a folder called .storybook, which contains various configuration files.</p><h2>5. Addons and Essential addons</h2><h2>6. API</h2>]]></content>
         <author>
             <name>Sheldon Y Sun</name>
             <uri>https://github.com/777sunny777</uri>

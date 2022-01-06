@@ -1,9 +1,11 @@
 ---
 slug: storybook-usage
-title: Storybook
+title: How to use Storybook
 authors: [sheldon]
 tags: [storybook, react]
 ---
+
+import react from 'react';
 
 :::tip
 - 这篇blog是storybook的入门教程并且包含了我使用storybook 3年多的一些体验 
@@ -134,8 +136,8 @@ export const TestRemix = () => <>
 
 在低版本中(V6仍然支持addons写法)，是通过安装addon-knobs插件来实现的。 
 
-<video autoplay="" muted="" playsinline="" loop="">
-    <source src="https://storybook.js.org/9d2e1f29cfb010e3aae6cd76547c4bab/addon-controls-optimized.mp4" type="video/mp4">
+<video controls="controls" autoplay="autoplay" loop="loop" style={{width: '100%'}}>
+    <source src="https://storybook.js.org/9d2e1f29cfb010e3aae6cd76547c4bab/addon-controls-optimized.mp4" type="video/mp4"/>
 </video>
 
 根据我的经验，和using args 一样，使用还是不使用需要根据项目需求，或者寻找折中的方法而两者兼顾。
@@ -143,10 +145,10 @@ export const TestRemix = () => <>
 
 ### 2-4 Action
 
-我目前还没有找到Action的合适场景。它和Control一样的，在V6版本中是内置插件，需要argTypes来定义，新版本中需要写成template形式才能触发。
+我目前还没有找到Action的合适场景。它和Control一样的，在V6版本中是内置插件，需要argTypes来定义，新版本V6中需要写成template形式才能触发。
 
-<video autoplay="" muted="" playsinline="" loop="">
-    <source src="https://storybook.js.org/b0366940cf7195b6d5b646c6105c217c/addon-actions-optimized.mp4" type="video/mp4">
+<video controls="controls" autoplay="autoplay" loop="loop" style={{width: '100%'}}>
+    <source src="https://storybook.js.org/b0366940cf7195b6d5b646c6105c217c/addon-actions-optimized.mp4" type="video/mp4"/>
 </video>
 
 ```jsx
@@ -168,4 +170,137 @@ export const parameters = {
 }
 
 ```
+
+### 2-5 Using parameters
+
+Parameters are Storybook’s method of defining static metadata for stories. 
+A story’s parameters can be used to provide configuration to various addons at the level of a story or group of stories.
+
+Parameters主要是为stories做一些页面配置, 也可以在preview中进行global的配置
+
+```jsx
+  parameters: {
+    docs: { page: null },
+    actions: { argTypesRegex: '^on.*' },
+    centered: { disable: true },
+    backgrounds: {
+      values: [
+        { name: 'red', value: '#f00' },
+        { name: 'green', value: '#0f0' },
+        { name: 'blue', value: '#00f' },
+      ],
+    },
+  },
+```
+
+### 2-6 Using decorators
+
+Decorators are a mechanism to wrap a component in arbitrary markup when rendering a story. 
+Components are often created with assumptions about ‘where’ they render. 
+Your styles might expect a theme or layout wrapper, or your UI might expect specific context or data providers.
+
+decorators就是页面装饰，可以有机会给页面做一些dom结构或者样式的调整
+
+```jsx
+import React from 'react';
+import { Button } from './Button';
+
+export default {
+  title: 'Button',
+  component: Button,
+  decorators: [
+    (Story) => (
+      <div style={{ margin: '3em' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+```
+
+## 3. Write Docs
+
+Storybook 目前主要提供了三种方式用于文档的书写
+
+
+### 3-1 利用component parameters
+#### 优点：
+- 可以自动解析组件中的props
+#### 缺点：
+- interface的format要严格
+- docs中不能自定义，是自动生成的
+
+
+```jsx
+// ButtonGroup.stories.js|jsx
+import React from 'react';
+import { Button, ButtonGroup } from './ButtonGroup';
+
+export default {
+  title: 'ButtonGroup',
+  // storybook use the component/subcomponents to extract the component's description and props
+  // override the docs.page parameters with null to remove its content
+  component: ButtonGroup,
+  subcomponents: { Button },
+};
+```
+
+### 3-2 mdx
+
+:::note
+- Currently there's an issue when using MDX stories with IE11. This issue does not apply to Docs page
+:::
+
+MDX 是非常好的书写docs的方式，如果你的项目不需要兼容IE11，我强烈建议你用mdx的方式来写case的文档。
+#### 优点：
+- 可以将md和JSX混合书写，非常灵活
+#### 缺点：
+- 不支持IE11
+
+[详细](https://storybook.js.org/docs/react/writing-docs/mdx)
+
+MDX is a standard file format that combines Markdown with JSX. 
+It means you can use Markdown’s terse syntax (such as # heading) for your documentation, 
+write stories that compile to our component story format, and freely embed JSX component blocks at any point in the file. All at once.
+
+
+### 3-3 利用docs parameters
+
+因为IE11而用不了mdx，可以尝试用jsx组件配置到docs.page的方式进行docs的书写。个人认为，如果你的项目支持IE11，而且你还希望自定义docs内容，
+用这种方式是最好选择
+
+#### 优点：
+- 可以写JSX，自定义docs页面布局样式
+- 支持IE11
+#### 缺点：
+- 不能用md
+
+```jsx
+// ButtonGroup.stories.js|jsx
+import React from 'react';
+import { Button, ButtonGroup } from './ButtonGroup';
+import { customDocumentComponemt } from './customDocumentComponemt'; //jsx file
+
+export default {
+  title: 'ButtonGroup',
+  component: ButtonGroup,
+  parameters: {
+    docs: {
+      page: customDocumentComponemt
+    }
+  }
+};
+```
+
+## 4. Configure
+
+Storybook is configured via a folder called .storybook, which contains various configuration files.
+
+
+## 5. Addons and Essential addons
+
+## 6. API
+
+
+
 
