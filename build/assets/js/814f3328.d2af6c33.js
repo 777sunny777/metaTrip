@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkblog=self.webpackChunkblog||[]).push([[535],{5641:function(e){e.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"\u57fa\u91d1\u57fa\u7840(\u4e00)","permalink":"/metaTrip/build/blog/funding-basic"},{"title":"How to use Storybook","permalink":"/metaTrip/build/blog/storybook-usage"}]}')}}]);

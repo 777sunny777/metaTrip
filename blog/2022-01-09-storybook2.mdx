@@ -1,0 +1,285 @@
+---
+slug: storybook-usage2
+title: How to use Storybook 2
+authors: [sheldon]
+tags: [storybook, react]
+---
+
+import react from 'react';
+
+:::tip
+- 这篇blog是storybook的入门教程并且包含了我使用storybook 3年多的一些体验 
+- 只针对React项目
+- 进一步学习，请访问[Storybook官网](https://storybook.js.org/)
+:::
+
+[Storybook](https://storybook.js.org/) is an open source tool for building UI components and pages in isolation. It streamlines UI development, testing, and documentation.
+
+从Storybook的官方描述来看，他是用于快速构建UI demo的工具，可以帮用户快速构建页面；并且有很好的语法功能，轻松书写demo；还有很好的辅助插件，
+比如demo的文档辅助，参数辅助，还有accessibility辅助测试等等。这一切几乎促使它成为了项目demo的最好选择。因为我的项目涉及到组件库的开发，
+所以storybook就更显得合适和重要。
+
+:::note
+- version: v6.4.9(Currently) and [Latest](https://github.com/storybookjs/storybook/releases)
+:::
+
+Storybook 代码库更新很活跃，几乎一年一次major版本的更新，总会带来些新的功能，这篇blog我们那目前最新版本v6.4.9 为例进行说明
+
+
+## 4. Configure
+
+Storybook is configured via a folder called .storybook, which contains various configuration files.
+
+Storybook配置文件一般是放在.storybook的文件夹下面，通过-c也可以进行路径配置。主要包含如下三个文件：main.js preview.js and manager.js
+[Detials](https://storybook.js.org/docs/react/configure/overview)
+
+### 4-1. main.js
+
+The main configuration file is main.js.
+
+:::note
+- This file controls the Storybook server's behavior, so you must restart Storybook’s process when you change it.
+:::
+
+The main.js configuration file is a preset and, as such, has a powerful interface, but the key fields within it are:
+
+- stories: 主要是配置storie cases的路径，默认是文件名中带有 stories 的文件，文件路径，文件名规则，文件后缀都是可配置的。
+- addons - 配置一下页面中需要用到的addons.
+- webpackFinal - 自定义的 webpack configuration.
+- babel - 自定义的 babel configuration.
+
+```jsx
+// .storybook/main.js
+
+module.exports = {
+  stories: ['../packages/MyStories'],
+  addons: ['@storybook/addon-essentials'],
+  webpackFinal: async (config, { configType }) => {
+    config.module.rules.push({
+      test: /\.scss$/,
+      use: ['style-loader', 'css-loader', 'sass-loader'],
+      include: path.resolve(__dirname, '../'),
+    });
+
+    return config;
+  },
+    babel: async (options) => ({
+    ...options,
+    // any extra options you want to set
+  })
+};
+
+```
+
+#### On-demand story loading：
+
+按需加载stories，进行性能提升，**Starting with Storybook 6.4**, you can optimize your story loading by enabling the storyStoreV7 feature flag in your configuration as follows:
+
+```jsx
+// .storybook/main.js
+
+module.exports = {
+  stories: [],
+  addons: ['@storybook/addon-essentials'],
+  features: {
+    storyStoreV7: true,
+  },
+};
+
+```
+
+### 4-2. preview.js
+
+To control the way stories are rendered and add global decorators and parameters
+
+- This is loaded in the Canvas tab
+- Use preview.js for global code that applies to all stories.
+
+The preview.js file can be an ES module and export the following keys:
+
+- decorators：包含页面结构和全局样式，都可以在decorators中定义
+- parameters：一般可以配置全局的docs和action，background
+- globalTypes: 
+
+```jsx
+// .storybook/preview.js
+
+// createGlobalStyle from styled-component
+import GlobalStyles from './GlobalStyles';
+
+export const decorators = [
+  (Story) => (
+    <GlobalStyles />
+    <div style={{ margin: '3em' }}>
+      <Story />
+    </div>
+  ),
+];
+
+export const parameters = {
+  backgrounds: {
+    values: [
+      { name: 'red', value: '#f00' },
+      { name: 'green', value: '#0f0' },
+    ],
+  },
+};
+
+export const globalTypes = {
+  theme: {
+    name: 'Theme',
+    description: 'Global theme for components',
+    defaultValue: 'light',
+    toolbar: {
+      icon: 'circlehollow',
+      // Array of plain string values or MenuItem shape (see below)
+      items: ['light', 'dark'],
+      // Property that specifies if the name of the item will be displayed
+      showName: true,
+    },
+  },
+};
+
+```
+
+### 4-3. manager.js
+
+To control the layout of Storybook’s UI you can use addons.setConfig in your .storybook/manager.js:
+
+```jsx
+// .storybook/manager.js
+
+import { addons } from '@storybook/addons';
+
+addons.setConfig({
+  isFullscreen: false,
+  showNav: true,
+  showPanel: true,
+  panelPosition: 'bottom',
+  enableShortcuts: true,
+  isToolshown: true,
+  theme: undefined,
+  selectedPanel: undefined,
+  initialActive: 'sidebar',
+  sidebar: {
+    showRoots: false,
+    collapsedRoots: ['other'],
+  },
+  toolbar: {
+    title: { hidden: false, },
+    zoom: { hidden: false, },
+    eject: { hidden: false, },
+    copy: { hidden: false, },
+    fullscreen: { hidden: false, },
+  },
+});
+
+```
+
+## 5. Essential addons and Addons
+
+Storybook在发展的过程中，会吸收一些常用的addon，作为框架预制的addon，这个就是Essential addons and Addons的区别。 
+低版本的control 实际上是一个@storybook/addon-knobs，在V6版本可以内置生成了。但是这个插件本身目前是向下兼容的
+
+### 5-1. Essential addons
+
+If you're upgrading from a previous Storybook version, you'll need to run the following command in your terminal:
+
+```jsx
+#With npm
+npm install -D @storybook/addon-essentials
+
+#With yarn
+yarn add -D @storybook/addon-essentials
+
+// .storybook/main.js
+
+module.exports = {
+  addons: ['@storybook/addon-essentials'],
+};
+
+```
+
+There are many third-party addons as well as “official” addons developed by the Storybook core team.、
+[Detials](https://storybook.js.org/docs/react/essentials/introduction)
+
+- Docs
+- Controls
+- Actions
+- Viewport
+- Backgrounds
+- Toolbars & globals
+- Measure
+- Outline
+
+
+### 5-2. Install 3rd party addons
+
+Storybook has [hundreds of reusable addons](https://storybook.js.org/addons) that are packaged as NPM modules.
+
+#### Using addons
+[Detials](https://storybook.js.org/docs/react/addons/install-addons#using-addons)
+
+```jsx
+
+yarn add -D @storybook/addon-a11y
+
+// .storybook/main.js
+
+module.exports = {
+  stories: [],
+  addons: [
+    // Other Storybook addons
+    '@storybook/addon-a11y', //👈 The addon registered here
+  ],
+};
+
+```
+
+<img src="https://storybook.js.org/5c457fbc275d0c3e2a37aae388a6019f/storybook-addon-installed-registered.png" alt="Storybook addon" style={{width: '100%'}}/>
+
+
+### 5-3. 自定义addons
+
+Now let’s add a panel to Storybook. Inside the src directory, create a new file called register.js and add the following:
+[Detials](https://storybook.js.org/docs/react/addons/writing-addons#add-a-panel)
+
+```jsx
+// /my-addon/src/register.js
+
+import React from 'react';
+
+import { addons, types } from '@storybook/addons';
+
+import { AddonPanel } from '@storybook/components';
+
+const ADDON_ID = 'myaddon';
+const PANEL_ID = `${ADDON_ID}/panel`;
+
+// give a unique name for the panel
+const MyPanel = () => <div>MyAddon</div>;
+
+addons.register(ADDON_ID, (api) => {
+  addons.add(PANEL_ID, {
+    type: types.PANEL,
+    title: 'My Addon',
+    render: ({ active, key }) => (
+      <AddonPanel active={active} key={key}>
+        <MyPanel />
+      </AddonPanel>
+    ),
+  });
+});
+```
+
+:::note
+- register 需要在main.js进行注册（When you register a Storybook addon, it will look for either register.js or preset.js as the entry points.）
+:::
+
+<img src="https://storybook.js.org/8a84ad965e96ef91ab0feb62f03b48b9/addon-initial-state.png" alt="Storybook addon" style={{width: '100%'}}/>
+
+
+## 6. CLI options
+
+Storybook comes with two CLI utilities: start-storybook and build-storybook.
+[Detials](https://storybook.js.org/docs/react/api/cli-options)

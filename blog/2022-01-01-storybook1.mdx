@@ -1,6 +1,6 @@
 ---
-slug: storybook-usage
-title: How to use Storybook
+slug: storybook-usage1
+title: How to use Storybook 1
 authors: [sheldon]
 tags: [storybook, react]
 ---
@@ -24,6 +24,41 @@ import react from 'react';
 :::
 
 Storybook 代码库更新很活跃，几乎一年一次major版本的更新，总会带来些新的功能，这篇blog我们那目前最新版本v6.4.9 为例进行说明
+
+
+
+## 0. Storybook页面布局
+
+### Sidebar and Canvas
+
+<video controls="controls" autoPlay="autoplay" loop="loop" style={{width: '100%'}}>
+    <source src="https://storybook.js.org/f818682edbbcdf2c04093f633aa36761/example-browse-all-stories-optimized.mp4" type="video/mp4"/>
+</video>
+
+### Shortcuts
+
+<video controls="controls" autoPlay="autoplay" loop="loop" style={{width: '100%'}}>
+    <source src="https://storybook.js.org/b398f68ed8889feed0a52f077510efcf/storybook-keyboard-shortcuts-optimized.mp4" type="video/mp4"/>
+</video>
+
+### Toolbar
+
+<video controls="controls" autoPlay="autoplay" loop="loop" style={{width: '100%'}}>
+    <source src="https://storybook.js.org/8b083907d74e7f2b9a298e5f324cc751/toolbar-walkthrough-optimized.mp4" type="video/mp4"/>
+</video>
+
+### Docs
+
+<video controls="controls" autoPlay="autoplay" loop="loop" style={{width: '100%'}}>
+    <source src="https://storybook.js.org/07234fedf00ba418879c443de0764c1c/toolbar-docs-tab-optimized.mp4" type="video/mp4"/>
+</video>
+
+### Addons
+
+<video controls="controls" autoPlay="autoplay" loop="loop" style={{width: '100%'}}>
+    <source src="https://storybook.js.org/946b2f4bdb006e8475d21202d68b9eec/addons-walkthrough-optimized.mp4" type="video/mp4"/>
+</video>
+
 
 ## 1. 安装
 
@@ -136,7 +171,7 @@ export const TestRemix = () => <>
 
 在低版本中(V6仍然支持addons写法)，是通过安装addon-knobs插件来实现的。 
 
-<video controls="controls" autoplay="autoplay" loop="loop" style={{width: '100%'}}>
+<video controls="controls" autoPlay="autoplay" loop="loop" style={{width: '100%'}}>
     <source src="https://storybook.js.org/9d2e1f29cfb010e3aae6cd76547c4bab/addon-controls-optimized.mp4" type="video/mp4"/>
 </video>
 
@@ -147,7 +182,7 @@ export const TestRemix = () => <>
 
 我目前还没有找到Action的合适场景。它和Control一样的，在V6版本中是内置插件，需要argTypes来定义，新版本V6中需要写成template形式才能触发。
 
-<video controls="controls" autoplay="autoplay" loop="loop" style={{width: '100%'}}>
+<video controls="controls" autoPlay="autoplay" loop="loop" style={{width: '100%'}}>
     <source src="https://storybook.js.org/b0366940cf7195b6d5b646c6105c217c/addon-actions-optimized.mp4" type="video/mp4"/>
 </video>
 
@@ -291,16 +326,3 @@ export default {
   }
 };
 ```
-
-## 4. Configure
-
-Storybook is configured via a folder called .storybook, which contains various configuration files.
-
-
-## 5. Addons and Essential addons
-
-## 6. API
-
-
-
-
