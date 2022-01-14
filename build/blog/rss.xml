@@ -4,9 +4,28 @@
         <title>MetaTrip Blog</title>
         <link> https://777sunny777.github.io/metaTrip/metaTrip/build/blog</link>
         <description>MetaTrip Blog</description>
-        <lastBuildDate>Sun, 09 Jan 2022 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 14 Jan 2022 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
+        <item>
+            <title><![CDATA[常见宽基指数基金(二)]]></title>
+            <link> https://777sunny777.github.io/metaTrip/metaTrip/build/blog/funding-basic3</link>
+            <guid>funding-basic3</guid>
+            <pubDate>Fri, 14 Jan 2022 00:00:00 GMT</pubDate>
+            <description><![CDATA[- From 《指数基金投资指南》章节3]]></description>
+            <content:encoded><![CDATA[<p>:::tip</p><ul><li>From 《指数基金投资指南》章节3</li><li>小白学习，切勿盲目跟从
+:::</li></ul><h2>常见宽基指数基金</h2><table><thead><tr><th>序号</th><th>名称</th><th>指数简介</th><th>股票个数</th></tr></thead><tbody><tr><td>10</td><td>中证基本面50指数(000925, 399925)</td><td>按照4个基本面指标，挑选综合最强的50个公司</td><td>50</td></tr><tr><td>10</td><td>央视财经50指数(399550)</td><td>央视联合高校专家挑选, 忽略</td><td>50</td></tr><tr><td>10</td><td>恒生指数(HSI)</td><td>港交所, DQII 代购，香港上市规模最大50家</td><td>50</td></tr><tr><td>10</td><td>H 股指数(恒生中国企业指数)</td><td>公司在内地注册，香港上市就是H股，挑选的是40家最大的H股</td><td>40</td></tr><tr><td>10</td><td>上证50AH优选指数</td><td>27纯A，23同时具有AH公司中相对便宜的那一类</td><td>50</td></tr><tr><td>10</td><td>纳斯达克100指数(NDX)</td><td>美国股市，纳斯达克最大100家，DQII代购</td><td>100</td></tr><tr><td>10</td><td>标普500指数</td><td>类似国内的沪深300</td><td>300</td></tr></tbody></table><blockquote><h3>基本面指数特点</h3><ul><li>另一种加权策略，4个维度来衡量，营业收入，现金流，净资产和分红。</li><li>往往也都是大盘股，和上证50指数相似，单挑选股从4个维度出发，会考虑更全面些。</li></ul></blockquote><blockquote><h3>QDII 基金</h3><ul><li>投资于香港，美国等市场的基金品种</li><li>这种基金我们可以理解为‘代购’</li><li>有暂停申购，可以赎回的风险，内地市场暂时不成熟</li></ul></blockquote><blockquote><h3>H股指数特点</h3><ul><li>有重复，但不是恒生指数</li><li>以境外投资者为主</li><li>与A股指数有密切的关系，很多公司在A股和H股都有上市，比如H股指数和上证50重合度高，上证50是中国投资者为主，
+H股指数是欧美投资者为主， 两者的涨跌有时差，并不严格同步，但是长期趋势一致，所以买入AH股中相对便宜的，卖出贵的是其策略</li></ul></blockquote><table><thead><tr><th>名称</th><th>描述</th></tr></thead><tbody><tr><td>上证50指数</td><td>27纯A，23同时具有AH公司中的A股</td></tr><tr><td>50AH优选指数</td><td>27纯A，23同时具有AH公司中相对便宜的那一类</td></tr><tr><td>H股指数</td><td>17纯H，23同时具有AH公司中的H股</td></tr></tbody></table>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[常见宽基指数基金(一)]]></title>
+            <link> https://777sunny777.github.io/metaTrip/metaTrip/build/blog/funding-basic2</link>
+            <guid>funding-basic2</guid>
+            <pubDate>Tue, 11 Jan 2022 00:00:00 GMT</pubDate>
+            <description><![CDATA[- From 《指数基金投资指南》章节3]]></description>
+            <content:encoded><![CDATA[<p>:::tip</p><ul><li>From 《指数基金投资指南》章节3</li><li>小白学习，切勿盲目跟从
+:::</li></ul><h2>指数基金分类</h2><p>最常见的分类就是宽基指数和行业指数。</p><ul><li>指数基金在挑选股票的时候，不限制投资行业，就是<strong>宽基指数基金</strong>。</li><li>指数基金在挑选股票的时候，限制投资行业，就是<strong>行业指数基金</strong>。行业指数基金受行业特性的影响非常大。</li></ul><p>从交易渠道上可以分为场内指数基金和场外指数基金，这个场指的是证卷交易所。</p><ul><li>场内指数基金在证卷交易所上市，可以有‘申购赎回’和‘买入卖出’两套交易体系，其中买入卖出方式需要在证卷交易所进行</li><li>场外基金，不在证卷交易所上市，只有‘申购赎回’一种</li><li>场内基金主要有两种：ETF和LOF基金，这两种基金都有可以在交易所进行自由买卖，不同的是，ETF只能通过股票交易软件交易，LOF除此之外还可以像场外基金一样通过‘申购赎回’方式交易</li></ul><h2>常见宽基指数基金</h2><table><thead><tr><th>序号</th><th>名称</th><th>指数简介</th><th>股票个数</th></tr></thead><tbody><tr><td>1</td><td>上证50指数(000016)</td><td>是从上交所挑选的沪市规模最大，流动性好，最具代表性的50只股票组成的样本</td><td>50</td></tr><tr><td>2</td><td>沪深300指数(000300, 399300)</td><td>是中证指数公司开发的，从上交所和深交所挑选的，规模最大，流动性好的300只股票</td><td>300</td></tr><tr><td>3</td><td>中证500指数(000905,399905)</td><td>是中证指数公司开发的，从上交所和深交所挑选的，排除沪深300的，国内中型公司代表</td><td>500</td></tr><tr><td>4</td><td>创业板指数(399006)</td><td>创业板最主要100家企业</td><td>100</td></tr><tr><td>5</td><td>创业板50指数(399673)</td><td>创业板最主要50家企业</td><td>50</td></tr><tr><td>6</td><td>上证红利指数(000015)</td><td>最老牌，大盘股为主，上交所过去两年平均现金股息率最高的50只股票</td><td>50</td></tr><tr><td>7</td><td>中证红利指数(000922，399922)</td><td>从上交所和深交所挑选，过去两年平均现金股息率最高的100只股票</td><td>100</td></tr><tr><td>8</td><td>深证红利指数(399324)</td><td>深交所过去两年平均现金股息率最高的40只股票</td><td>40</td></tr><tr><td>9</td><td>红利机会指数(CSPSADRP)</td><td>标普公司围绕A股开发的红利指数，挑选更严格</td><td>100</td></tr></tbody></table><blockquote><h3>指数基金的挑选</h3><ul><li>规模比较大，历史比较长，追踪效果好</li><li>要避开规模较小的指数基金，有亏本清盘风险，最好规模在1亿以上</li><li>寻找费用最低，误差最小的品种</li><li>另一种思路是选择有特色的增强型指数基金，复制指数的基础上，寻找短期机会，有风险，可能差于普通的指数基金</li></ul></blockquote><blockquote><h3>A股上交所大盘股历史走势特点</h3><ul><li>总体走势是上涨的</li><li>从03年底以来，只有07，09，15三个明显牛市，其余走平或阴跌</li><li>A股经常暴涨或暴跌，指数基金也带有这个特征，需要注意</li></ul></blockquote><blockquote><h3>上证50指数特点</h3><ul><li>大盘股为主，规模最小也有350多亿，都是关系国计民生的大公司，这些大公司股票也叫<strong>蓝筹股</strong>，上证50并不是投资市场的整体指数，更多的是<strong>投资大盘股</strong></li><li>只有上交所股票，没有深交所股票，没法反应国内股票的整体走势</li></ul></blockquote><blockquote><h3>沪深300指数特点</h3><ul><li>占国内股市全部规模的60%以上</li><li>以大盘股为主，兼顾上海和深圳上市公司</li><li>上证50包含在沪深300中，所以两个指数很多时候表现也比较重合</li></ul></blockquote><blockquote><h3>中证500指数特点</h3><ul><li>以中型上市公司为主，兼顾上海和深圳上市公司</li><li>与沪深300无重合</li></ul></blockquote><blockquote><h3>创业板指数特点</h3><ul><li>创业板相关的指数有两个，一个是创业板综指（衡量创业板所有上市公司股价平均表现），一个是创业板指数（最主要的100家创业板上市公司）</li><li>创业板50指数，相当于创业板的‘上证50’</li><li>公司规模小，以小中公司为主，更容易暴涨暴跌</li></ul></blockquote><blockquote><h3>红利指数特点</h3><ul><li>前面介绍的都是按照市值来加权的，即股票规模越大，权重越高</li><li>红利指数是按照股息率来加权的</li><li>高股息率，在熊市更有优势，熊市分到的100万能买到更多牛市分到100万的股票份额</li><li>能长期发放现金股息的公司，盈利能力财务状况更好</li></ul></blockquote>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[How to use Storybook 2]]></title>
             <link> https://777sunny777.github.io/metaTrip/metaTrip/build/blog/storybook-usage2</link>
@@ -172,7 +191,7 @@ addons.register(ADDON_ID, (api) =&gt; {
 <a href="https://storybook.js.org/docs/react/api/cli-options">Detials</a></p>]]></content:encoded>
         </item>
         <item>
-            <title><![CDATA[基金基础(一)]]></title>
+            <title><![CDATA[资产与指数]]></title>
             <link> https://777sunny777.github.io/metaTrip/metaTrip/build/blog/funding-basic1</link>
             <guid>funding-basic1</guid>
             <pubDate>Thu, 06 Jan 2022 00:00:00 GMT</pubDate>
