@@ -4,9 +4,19 @@
         <title>MetaTrip Blog</title>
         <link> https://777sunny777.github.io/metaTrip/metaTrip/build/blog</link>
         <description>MetaTrip Blog</description>
-        <lastBuildDate>Fri, 14 Jan 2022 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Sun, 23 Jan 2022 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
+        <item>
+            <title><![CDATA[常见行业指数基金]]></title>
+            <link> https://777sunny777.github.io/metaTrip/metaTrip/build/blog/funding-basic4</link>
+            <guid>funding-basic4</guid>
+            <pubDate>Sun, 23 Jan 2022 00:00:00 GMT</pubDate>
+            <description><![CDATA[- From 《指数基金投资指南》章节3]]></description>
+            <content:encoded><![CDATA[<p>:::tip</p><ul><li>From 《指数基金投资指南》章节3</li><li>小白学习，切勿盲目跟从
+:::</li></ul><h2>常见行业指数基金</h2><p>指数基金专门投资某个行业的股票，也就是行业指数基金。行业指数基金投资风险更高。
+有时候宽基值指数基金没有太好机会的时候，行业指数基金对我们投资起到很好的补充作用。</p><blockquote><p>建议新手从宽基指数基金入门，积累足够经验之后在投资行业指数基金。</p></blockquote><h3>10个一级行业</h3><table><thead><tr><th>名称</th><th>包含</th><th>中证800一级行业指数2004~2017</th><th>相关指数及特点</th><th>养老产业</th></tr></thead><tbody><tr><td>材料</td><td>金属，采矿，化学制品</td><td>2.6</td><td></td><td></td></tr><tr><td>可选消费</td><td>汽车，零售， 媒体，房地产，影视业</td><td>4.7</td><td>需求比必须消费弱，有一定周期性（房地产）。中证全指可选消费指数</td><td>主要包括</td></tr><tr><td>必须消费（日常消费，主要消费）</td><td>食品，烟草，家具，饮料，酒，农副食品</td><td>9.0</td><td>稳定。上证，上证80，中证800，全指消费指数</td><td>主要包括</td></tr><tr><td>能源</td><td>能源设备与服务，石油天然气</td><td>2.0</td><td></td><td></td></tr><tr><td>金融</td><td>银行， 保险，券商</td><td>5.2</td><td>周期性，政策</td><td></td></tr><tr><td>医药</td><td>医疗保健，制药，生物科技</td><td>9.3</td><td>稳定，中证800医药，上证医药，细分医药，300/500医药指数等</td><td>主要包括</td></tr><tr><td>工业</td><td>航空航天，运输，建筑产品</td><td>3</td><td></td><td></td></tr><tr><td>信息</td><td>硬件，软件，信息技术</td><td>3.5</td><td></td><td></td></tr><tr><td>电信</td><td>固定线路，无线通信，电信业务</td><td>4.6</td><td></td><td></td></tr><tr><td>公共事业</td><td>电力，天然气，水</td><td>2.4</td><td></td><td></td></tr></tbody></table><blockquote><h4>值得投资的行业</h4><ul><li>天生更容易赚钱的行业 （消费和医药行业）</li><li>具有明显强周期的行业 （低买高卖，金融业地产，能源，部分材料行业）</li></ul></blockquote><blockquote><h4>开公司如何才能赚到钱 （茅台，可口可乐）</h4><ul><li>客户需求能够持续稳定</li><li>产品别人模仿不了，企业有护城河能保证一定利润率</li><li>再投资需求小，能够活得大量自由现金流</li><li>二级市场还要一个条件：企业愿意回馈股东，而不是乱花钱</li></ul></blockquote><blockquote><h4>其他有特定行业</h4><ul><li>地产行业，军工行约，环保行业，白酒行业</li></ul></blockquote>]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[常见宽基指数基金(二)]]></title>
             <link> https://777sunny777.github.io/metaTrip/metaTrip/build/blog/funding-basic3</link>
