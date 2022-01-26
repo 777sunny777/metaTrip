@@ -2,11 +2,233 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id> https://777sunny777.github.io/metaTrip/metaTrip/build/blog</id>
     <title>MetaTrip Blog</title>
-    <updated>2022-01-23T00:00:00.000Z</updated>
+    <updated>2022-01-26T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href=" https://777sunny777.github.io/metaTrip/metaTrip/build/blog"/>
     <subtitle>MetaTrip Blog</subtitle>
     <icon> https://777sunny777.github.io/metaTrip/metaTrip/build/img/metaIcon.png</icon>
+    <entry>
+        <title type="html"><![CDATA[Micro FrontEnd Basic]]></title>
+        <id>microFE1</id>
+        <link href=" https://777sunny777.github.io/metaTrip/metaTrip/build/blog/microFE1"/>
+        <updated>2022-01-26T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[- 这是我对于MFE比较系统学习记录的首篇blog]]></summary>
+        <content type="html"><![CDATA[<p>:::tip</p><ul><li>这是我对于MFE比较系统学习记录的首篇blog </li><li>主要参考的Cam Jackson的文章<a href="https://martinfowler.com/articles/micro-frontends.html">Micro Frontends</a>
+:::</li></ul><p>Cam Jackson 是Thoughtworks的全栈工程师，这篇文章虽然出自2019年，但是对于MFE概念的初学者还是友好的，可以比较容易的理解。
+相应的文章最后还提供了MEF的example, 按照文章顺序去学习，应该可以很快入门。我的这篇blog，算是对他的文章和我一点经验的总结，
+我们直接步入正题。</p><h2>1. Micro Frontends</h2><p>&quot;An architectural style where independently deliverable frontend applications are composed into a greater whole&quot;</p><p>这是Cam Jackson 或者说是Thoughtworks对MFE的定义。我们从中可以提取到两个重点：</p><ul><li>independently deliverable. 独立交付</li><li>composed into a greater whole. 组合构成整体</li></ul><h3>1-1. MFE cost</h3><p>因为后面我们要详细解读下MFE的Benefits，所以这里主要是先将一下他的cost：</p><p>:::note
+there are no free lunches when it comes to software architecture - everything comes with a cost.</p><ul><li>Some micro frontend implementations can lead to duplication of dependencies</li><li>increasing the number of bytes our users must download</li><li>the dramatic increase in team autonomy can cause fragmentation in the way your teams work</li></ul><p>Nonetheless, we believe that these risks can be managed, and that the benefits of micro frontends often outweigh the costs
+:::</p><p>总体来说，MFE可能会导致依赖重复，增加了需要download的asset，还有就是独立团队工作方式上的一些挑战。对于结论Thoughtworks认为总体上MFE还是利大于弊的。
+我们接下来说说Benefits。</p><h2>2. Benefits</h2><h3>2-1. Incremental upgrades(增量升级)</h3><p>The endgame here is that we&#x27;re afforded more freedom to make case-by-case decisions on individual parts of our product,
+and to make incremental upgrades to our architecture, our dependencies, and our user experience.
+If there is a major breaking change in our main framework, each micro frontend can be upgraded whenever it makes sense,
+rather than being forced to stop the world and upgrade everything at once. If we want to experiment with new technology,
+or new modes of interaction, we can do it in a more isolated fashion than we could before.</p><p>好处之一就是MFE的子模块升级是自主的，并且与主模块解耦，即主模块有过有些大的major breaking changes，子模块也不需要和主模块同步进行修改和升级。
+而是可以选择一个自身合适的时机来进行升级。</p><p>:::tip
+这里面我的理解是：主模块的以来还是会default影响MFE的子模块的，但是子模块自身可以选择要不要这种影响，即依赖主模块的依赖，
+或者关闭主模块依赖而只选择自身的依赖，这样就比较灵活和自主了。这条我会在后面进行相应的印证。
+:::</p><h3>2-2. Simple, decoupled codebases(简单，解耦)</h3><p>These smaller codebases tend to be simpler and easier for developers to work with.
+In particular, we avoid the complexity arising from unintentional and inappropriate coupling between components
+that should not know about each other. </p><p>micro frontends push you to be explicit and deliberate about how data and events flow
+between different parts of the application, which is something that we should have been doing anyway!</p><p>MFE一定是小而精的，尽量减少组件间数据或事件传输，这一点需要我们深入的思考。</p><h3>2-3. Independent deployment(独立部署)</h3><p>Just as with microservices, independent deployability of micro frontends is key.
+This reduces the scope of any given deployment, which in turn reduces the associated risk.
+Regardless of how or where your frontend code is hosted, each micro frontend should have
+its own continuous delivery pipeline, which builds, tests and deploys it all the way to production.
+We should be able to deploy each micro frontend with very little thought given to the current state of
+other codebases or pipelines. It shouldn&#x27;t matter if the old monolith is on a fixed, manual,
+quarterly release cycle, or if the team next door has pushed a half-finished or broken feature into their master branch.
+If a given micro frontend is ready to go to production, it should be able to do so, and that decision
+should be up to the team who build and maintain it.</p><p>MFE是需要对立进行build，test和deploy到production的，这个也是其主要特征之一，也是一般项目进行MFE架构重构的主要目的。</p><img src="/metaTrip/build/img/blog/deployment.png" alt="" style="width:100%"/><h3>2-4. Autonomous teams(自治团队)</h3><p>Teams can have full ownership of everything they need to deliver value to customers,
+which enables them to move quickly and effectively</p><p>依赖越少，响应越灵活。这个和第三条比较相辅相成。</p><img src="/metaTrip/build/img/blog/horizontal.png" alt="" style="width:100%"/><h2>3. Integration approaches</h2><p>:::note
+there is a micro frontend for each page in the application, and there is a single container application, which:</p><ul><li>renders common page elements such as headers and footers</li><li>addresses cross-cutting concerns like authentication and navigation</li><li>brings the various micro frontends together onto the page, and tells each micro frontend when and where to render itself
+:::</li></ul><img src="/metaTrip/build/img/blog/composition.png" alt="" style="width:100%"/><h3>3-1. Server-side template composition</h3><p>rendering HTML on the server out of multiple templates or fragments.
+We have an index.html which contains any common page elements,
+and then uses server-side includes to plug in page-specific content from fragment HTML files</p><pre><code class="language-jsx">&lt;html lang=&quot;en&quot; dir=&quot;ltr&quot;&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;title&gt;Feed me&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;🍽 Feed me&lt;/h1&gt;
+    &lt;!--# include file=&quot;$PAGE.html&quot; --&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><pre><code class="language-jsx">server {
+    listen 8080;
+    server_name localhost;
+
+    root /usr/share/nginx/html;
+    index index.html;
+    ssi on;
+
+    # Redirect / to /browse
+    rewrite ^/$ http://localhost:8080/browse redirect;
+
+    # Decide which HTML fragment to insert based on the URL
+    location /browse {
+      set $PAGE &#x27;browse&#x27;;
+    }
+    location /order {
+      set $PAGE &#x27;order&#x27;;
+    }
+    location /profile {
+      set $PAGE &#x27;profile&#x27;
+    }
+
+    # All locations should render through index.html
+    error_page 404 /index.html;
+}
+</code></pre><p>This example shows how micro frontends is not necessarily a new technique,
+and does not have to be complicated.
+As long as we&#x27;re careful about how our design decisions affect the autonomy of our codebases and our teams, we can achieve many of the same benefits regardless of our tech stack.</p><p>实际上这个例子只是要告诉我们，MFE是一种思想，并不是一个新的技术，或者需要新的技术才可以实现。
+只要满足独立交付，组合构成整体都应该是MFE的范畴。</p><h3>3-2. Build-time integration</h3><p>One approach that we sometimes see is to publish each micro frontend as a package,
+and have the container application include them all as library dependencies.
+Here is how the container&#x27;s package.json might look for our example app:</p><pre><code class="language-jsx">{
+  &quot;name&quot;: &quot;@feed-me/container&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;description&quot;: &quot;A food delivery web app&quot;,
+  &quot;dependencies&quot;: {
+    &quot;@feed-me/browse-restaurants&quot;: &quot;^1.2.3&quot;,
+    &quot;@feed-me/order-food&quot;: &quot;^4.5.6&quot;,
+    &quot;@feed-me/user-profile&quot;: &quot;^7.8.9&quot;
+  }
+}
+</code></pre><p>component ui library 框架就是一种build-time的模式。他的引用是基于package的，依赖的形式存在。
+很多大的项目也是这种假的MFE开发方式。</p><p>At first this seems to make sense. It produces a single deployable Javascript bundle,
+as is usual, allowing us to de-duplicate common dependencies from our various applications.
+However, this approach means that we have to re-compile and release every single micro frontend
+in order to release a change to any individual part of the product. Just as with microservices,
+we&#x27;ve seen enough pain caused by such a lockstep release process that we would recommend
+strongly against this kind of approach to micro frontends.</p><p>这种方式的不合理之处就在于compile和release都需要同步进行，这个和MFE独立交付的概念是绝对相反的，是反MFE的一种方式。
+We should find a way to integrate our micro frontends at run-time, rather than at build-time.</p><h3>3-3. Run-time integration via iframes</h3><p>One of the simplest approaches to composing applications together in the browser is the humble iframe.
+By their nature, iframes make it easy to build a page out of independent sub-pages.
+They also offer a good degree of isolation in terms of styling and global variables not interfering with each other.</p><pre><code class="language-jsx">&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Feed me!&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Welcome to Feed me!&lt;/h1&gt;
+
+    &lt;iframe id=&quot;micro-frontend-container&quot;&gt;&lt;/iframe&gt;
+
+    &lt;script type=&quot;text/javascript&quot;&gt;
+      const microFrontendsByRoute = {
+        &#x27;/&#x27;: &#x27;https://browse.example.com/index.html&#x27;,
+        &#x27;/order-food&#x27;: &#x27;https://order.example.com/index.html&#x27;,
+        &#x27;/user-profile&#x27;: &#x27;https://profile.example.com/index.html&#x27;,
+      };
+
+      const iframe = document.getElementById(&#x27;micro-frontend-container&#x27;);
+      iframe.src = microFrontendsByRoute[window.location.pathname];
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>It can be difficult to build integrations between different parts of the application,
+so they make routing, history, and deep-linking more complicated,
+and they present some extra challenges to making your page fully responsive.</p><p>iframes觉得是MFE最简单的实现方式，我们主要考虑到灵活性的一些问题而不去采用它。比如responsive的实现就很困难。</p><h3>3-4. Run-time integration via JavaScript(主要实现方式)</h3><p>probably the most flexible one, and the one that we see teams adopting most frequently.
+Each micro frontend is included onto the page using a <strong>script</strong> tag, and upon load exposes a global function as its entry-point.
+The container application then determines which micro frontend should be mounted,
+and calls the relevant function to tell a micro frontend when and where to render itself.</p><pre><code class="language-jsx">&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Feed me!&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Welcome to Feed me!&lt;/h1&gt;
+
+    &lt;!-- These scripts don&#x27;t render anything immediately --&gt;
+    &lt;!-- Instead they attach entry-point functions to `window` --&gt;
+    &lt;script src=&quot;https://browse.example.com/bundle.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://order.example.com/bundle.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://profile.example.com/bundle.js&quot;&gt;&lt;/script&gt;
+
+    &lt;div id=&quot;micro-frontend-root&quot;&gt;&lt;/div&gt;
+
+    &lt;script type=&quot;text/javascript&quot;&gt;
+      // These global functions are attached to window by the above scripts
+      const microFrontendsByRoute = {
+        &#x27;/&#x27;: window.renderBrowseRestaurants,
+        &#x27;/order-food&#x27;: window.renderOrderFood,
+        &#x27;/user-profile&#x27;: window.renderUserProfile,
+      };
+      const renderFunction = microFrontendsByRoute[window.location.pathname];
+
+      // Having determined the entry-point function, we now call it,
+      // giving it the ID of the element where it should render itself
+      renderFunction(&#x27;micro-frontend-root&#x27;);
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>The above is obviously a primitive example, but it demonstrates the basic technique.
+Unlike with build-time integration, we can deploy each of the bundle.js files independently.
+And unlike with iframes, we have full flexibility to build integrations between our micro frontends however we like.
+We could extend the above code in many ways, for example to only download each JavaScript bundle as needed,
+or to pass data in and out when rendering a micro frontend.The flexibility of this approach, combined with the independent
+deployability, makes it our default choice, and the one that we&#x27;ve seen in the wild most often.</p><p>这种方式与iframe相比，可以解决子模块间的同步协作问题，比如responsive。与build-time相比，可以独立交付。而且还可以按需加载。
+所以成为了MFE实现的最主要方式。</p><h3>3-5. Run-time integration via Web Components</h3><p> for each micro frontend to define an HTML custom element for the container to instantiate,
+instead of defining a global function for the container to call.</p><pre><code class="language-jsx">&lt;html&gt;
+ &lt;head&gt;
+   &lt;title&gt;Feed me!&lt;/title&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+   &lt;h1&gt;Welcome to Feed me!&lt;/h1&gt;
+
+   &lt;!-- These scripts don&#x27;t render anything immediately --&gt;
+   &lt;!-- Instead they each define a custom element type --&gt;
+   &lt;script src=&quot;https://browse.example.com/bundle.js&quot;&gt;&lt;/script&gt;
+   &lt;script src=&quot;https://order.example.com/bundle.js&quot;&gt;&lt;/script&gt;
+   &lt;script src=&quot;https://profile.example.com/bundle.js&quot;&gt;&lt;/script&gt;
+
+   &lt;div id=&quot;micro-frontend-root&quot;&gt;&lt;/div&gt;
+
+   &lt;script type=&quot;text/javascript&quot;&gt;
+     // These element types are defined by the above scripts
+     const webComponentsByRoute = {
+       &#x27;/&#x27;: &#x27;micro-frontend-browse-restaurants&#x27;,
+       &#x27;/order-food&#x27;: &#x27;micro-frontend-order-food&#x27;,
+       &#x27;/user-profile&#x27;: &#x27;micro-frontend-user-profile&#x27;,
+     };
+     const webComponentType = webComponentsByRoute[window.location.pathname];
+
+     // Having determined the right web component custom element type,
+     // we now create an instance of it and attach it to the document
+     const root = document.getElementById(&#x27;micro-frontend-root&#x27;);
+     const webComponent = document.createElement(webComponentType);
+     root.appendChild(webComponent);
+   &lt;/script&gt;
+ &lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>the main difference being that you are opting in to doing things &#x27;the web component way&#x27;.
+If you like the web component spec, and you like the idea of using capabilities that the browser provides,
+then this is a good option. If you prefer to define your own interface between the container
+application and micro frontends, then you might prefer the previous example instead.</p><p>如果不需要考虑IE浏览器，也是一个很好的选择。</p><h2>4. Styling</h2><p>In a micro frontends landscape, many of these problems are exacerbated. For example,
+if one team&#x27;s micro frontend has a stylesheet that says h2 { color: black; },
+and another one says h2 { color: blue; }, and both these selectors are attached to the same page,
+then someone is going to be disappointed! This is not a new problem,
+but it&#x27;s made worse by the fact that these selectors were written by different teams at different times,
+and the code is probably split across separate repositories, making it more difficult to discover.</p><p>:::tip
+MFE主要是解决css的样式重名问题，目前的css有多种写法来避免这个问题， BEM，sass/less, css in js.
+我目前对这个具体的解决方式还有待理解，后面我会去印证一下。
+:::</p><h2>5. Shared component libraries</h2><p>We mentioned above that visual consistency across micro frontends is important,
+and one approach to this is to develop a library of shared, re-usable UI components.
+In general we believe that this a good idea, although it is difficult to do well.
+The main benefits of creating such a library are reduced effort through re-use of code,
+and visual consistency. In addition, your component library can serve as a living styleguide,
+and it can be a great point of collaboration between developers and designers.</p><p>简单来说，MFE也是需要同意视觉UI 标准的，这趋势就需要一个component ui 库来支持。比如mui，bootstrap。
+或者是项目自建，自建的方式可以是从多个子模块中抽取common的组件。而不用day1的时候就构建。
+但是这个component ui 库是需要的。 </p><p>:::tip
+我需要在项目中进一步印证一下。比如BRP和New UI MFE的关系
+:::</p><h2>6. Cross-application communication</h2><p>One of the most common questions regarding micro frontends is <strong>how to let them talk to each other</strong>.
+In general, we recommend having them communicate as little as possible,
+as it often reintroduces the sort of inappropriate coupling that we&#x27;re seeking to avoid in the first place.</p><p>That said, some level of cross-app communication is often needed. </p><ul><li>Custom events allow micro frontends to communicate indirectly, which is a good way to minimise direct coupling,
+though it does make it harder to determine and enforce the contract that exists between micro frontends. </li><li>Alternatively, the React model of passing callbacks and data downwards (in this case downwards from the container
+application to the micro frontends) is also a good solution that makes the contract more explicit. </li><li>A third alternative is to use the address bar as a communication mechanism.</li></ul><p>Whatever approach we choose, we want our micro frontends to communicate by sending messages or events to each other,
+and avoid having any shared state. </p><p>Just like sharing a database across microservices, as soon as we share our data structures and domain models,
+we create massive amounts of coupling, and it becomes extremely difficult to make changes.</p><p>这块我现在还理解不到位，需要进行一些POC，之后会另外详细写一篇blog。</p>]]></content>
+        <author>
+            <name>Sheldon Y Sun</name>
+            <uri>https://github.com/777sunny777</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[常见行业指数基金]]></title>
         <id>funding-basic4</id>
