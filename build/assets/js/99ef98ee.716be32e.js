@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkblog=self.webpackChunkblog||[]).push([[724],{3814:function(a){a.exports=JSON.parse('{"allTagsPath":"/metaTrip/build/blog/tags","slug":"/metaTrip/build/blog/tags/react","name":"react","count":4,"permalink":"/metaTrip/build/blog/tags/react"}')}}]);

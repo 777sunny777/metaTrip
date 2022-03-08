@@ -2,11 +2,306 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id> https://777sunny777.github.io/metaTrip/metaTrip/build/blog</id>
     <title>MetaTrip Blog</title>
-    <updated>2022-01-26T00:00:00.000Z</updated>
+    <updated>2022-03-08T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href=" https://777sunny777.github.io/metaTrip/metaTrip/build/blog"/>
     <subtitle>MetaTrip Blog</subtitle>
     <icon> https://777sunny777.github.io/metaTrip/metaTrip/build/img/metaIcon.png</icon>
+    <entry>
+        <title type="html"><![CDATA[useEffect，you really know it?]]></title>
+        <id>react1</id>
+        <link href=" https://777sunny777.github.io/metaTrip/metaTrip/build/blog/react1"/>
+        <updated>2022-03-08T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[- 这篇blog是对useEffect及相关hooks的深入学习。]]></summary>
+        <content type="html"><![CDATA[<p>:::tip</p><ul><li>这篇blog是对useEffect及相关hooks的深入学习。
+:::</li></ul><p><a href="https://reactjs.org/docs/hooks-effect.html">Using the Effect Hook</a> 对于常用的react hooks我一直认为是比较了解的，然而最近的一次项目组sharing，
+讨论到这块，居然发现这么常用的hook自己的理解竟然是有偏差的，还需要去深入的学习一下。这篇blog由此而来。</p><h2>1. useEffect</h2><p>:::note
+If you’re familiar with React class lifecycle methods, you can think of useEffect Hook as componentDidMount, componentDidUpdate, and componentWillUnmount combined.</p><p>我们常规的理解，useEffect应该就是之前class component生命周期中componentDidMount, componentDidUpdate, and componentWillUnmount的结合
+:::</p><p>react组件中有两种常见的side effects，一种需要clearup, 一种不需要，具体如下。</p><h3>1-1. Effects Without Cleanup</h3><p>在一些情况下，我们需要运行额外的代码在react更新dom结构之后，比如ajax 请求，手动更改dom结构，后者logging的时候。
+这些情况是不需要cleanup的。</p><p>我们看下面的例子：</p><pre><code class="language-jsx">class Example extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0
+    };
+  }
+
+  componentDidMount() {
+    document.title = `You clicked ${this.state.count} times`;
+  }
+  componentDidUpdate() {
+    document.title = `You clicked ${this.state.count} times`;
+  }
+
+  render() {
+    return (
+      &lt;div&gt;
+        &lt;p&gt;You clicked {this.state.count} times&lt;/p&gt;
+        &lt;button onClick={() =&gt; this.setState({ count: this.state.count + 1 })}&gt;
+          Click me
+        &lt;/button&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+</code></pre><p>用class component来写的时候，我们需要用到两个生命周期函数， componentDidMount在初始render的时候触发，componentDidUpdate在每次update的时候触发
+无论如何优化代码， <strong>we have to duplicate the code between these two lifecycle methods in class</strong>，我想这也是我们后面用hooks来代替的原因之一。</p><p>如果我们用Hooks来写呢</p><pre><code class="language-jsx" metastring="live">function Example() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() =&gt; {
+    console.log(&#x27;demo1 useEffect running&#x27;);
+    document.title = `You clicked ${count} times`;
+  });
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;You clicked {count} times&lt;/p&gt;
+      &lt;button onClick={() =&gt; setCount(count + 1)}&gt;
+        Click me
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre><p>默认情况下，useEffect会在第一次render以及后面每次update的时候触发，我们不需要考虑mounting还是updateing。
+it will remember the effect we used, and then run our effect after updating the DOM. This happens for every render, including the first one.</p><h3>1-2. Effects With Cleanup</h3><p>一般比较常见的需要cleanup的例子，有建立取消定时器，防止内存溢出等等，我们看react 官网class component with cleanup的例子：</p><pre><code class="language-jsx">class FriendStatus extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { isOnline: null };
+    this.handleStatusChange = this.handleStatusChange.bind(this);
+  }
+
+  componentDidMount() {
+    ChatAPI.subscribeToFriendStatus(
+      this.props.friend.id,
+      this.handleStatusChange
+    );
+  }
+  componentWillUnmount() {
+    ChatAPI.unsubscribeFromFriendStatus(
+      this.props.friend.id,
+      this.handleStatusChange
+    );
+  }
+  handleStatusChange(status) {
+    this.setState({
+      isOnline: status.isOnline
+    });
+  }
+
+  render() {
+    if (this.state.isOnline === null) {
+      return &#x27;Loading...&#x27;;
+    }
+    return this.state.isOnline ? &#x27;Online&#x27; : &#x27;Offline&#x27;;
+  }
+}
+</code></pre><p>其中componentDidMount 和 componentWillUnmount 是互为镜像的。
+如果我们用Hooks来写呢，需要return一个function，react会在cleanup的时候调用</p><pre><code class="language-jsx" metastring="live">function FriendStatus(props) {
+  const [isOnline, setIsOnline] = useState(null);
+
+  useEffect(() =&gt; {
+    function handleStatusChange(status) {
+      setIsOnline(status.isOnline);
+    }
+    
+    console.log(&#x27;demo2 useEffect running&#x27;);
+    // comment since we have no ChatAPI here, just for demo
+    // ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange);
+
+    // Specify how to clean up after this effect:
+    // We don’t have to return a named function from the effect. 
+    // We called it cleanup here to clarify its purpose, but you could return an arrow function or call it something different.
+    return function cleanup() {
+      console.log(&#x27;demo2 cleanup running&#x27;);
+      // ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange);
+    };
+  });
+
+  return (
+      &lt;&gt;
+        &lt;p&gt; {isOnline ? &#x27;Online&#x27; : &#x27;Offline&#x27;} &lt;/p&gt;
+        &lt;button onClick={ ()=&gt;setIsOnline(&#x27;online&#x27;) } &gt;Online&lt;/button&gt;
+        &lt;button onClick={ ()=&gt;setIsOnline(null) }&gt;Offline&lt;/button&gt;
+      &lt;/&gt;
+  )
+}
+</code></pre><p>:::tip
+试想，如果此时你尝试着去点击online和offline的button，那么此时的return会不会被调用？</p><p>按照文档return应该是在cleanup的时候调用的，那么state变化了，会触发cleanup么？
+:::</p><p>我就是在这个地方出现理解的错误，我认为state变化是不会触发cleanup的，只有在dom结构删除了的时候，也就是ummount的时候才会触发一次。
+但是测试结果和我想得完全不同，每次state变化，都会先触发cleanup，然后在触发side effect。</p><p>大家可以在上面的live demo中尝试，console里有记录可查。</p><p>然后我查找文档，发现了这么两段话。</p><p>:::tip
+Why did we return a function from our effect?</p><p>This is the optional cleanup mechanism for effects. Every effect may return a function that cleans up after it.
+This lets us keep the logic for adding and removing subscriptions close to each other. They’re part of the same effect!
+:::</p><p>:::tip
+When exactly does React clean up an effect?</p><p>React performs the cleanup when the component unmounts. However, as we learned earlier, effects run for every render and not just once.
+This is why React also cleans up effects from the previous render before running the effects next time. （这就是为什么React还会在下次运行效果之前清除上一次渲染的效果）
+We’ll discuss why this helps avoid bugs and how to opt out of this behavior in case it creates performance issues later below.
+:::</p><p>第一段话关键在于告诉我们return是每个effect中都存在的机制，<strong>不管你使用不使用，他都是effect的一部分</strong>。</p><p>第二句话关键在于告诉我们<strong>因为effect是多次运行的，所以return里的cleanup也是多次运行的</strong>，这样做是有原因的：1.避免bugs. 2.可以有退出机制。</p><h2>2. Tips for Using Effects</h2><h3>2-1. Tip: Use Multiple Effects to Separate Concerns</h3><p>Hooks let us split the code based on what it is doing rather than a lifecycle method name.
+不同的逻辑分在不同的useEffect里面，是得逻辑结构更清晰，这个应该是选择hooks的原因之二。</p><pre><code class="language-jsx">function FriendStatusWithCounter(props) {
+  const [count, setCount] = useState(0);
+  useEffect(() =&gt; {
+    document.title = `You clicked ${count} times`;
+  });
+
+  const [isOnline, setIsOnline] = useState(null);
+  useEffect(() =&gt; {
+    function handleStatusChange(status) {
+      setIsOnline(status.isOnline);
+    }
+
+    ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange);
+    return () =&gt; {
+      ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange);
+    };
+  });
+  // ...
+}
+</code></pre><p>:::tip
+Explanation: Why Effects Run on Each Update?</p><p>If you’re used to classes, you might be wondering why the effect cleanup phase happens after every re-render,
+and not just once during unmounting. Let’s look at a practical example to see why this design helps us create components with fewer bugs.</p><p>之前的误解原因使用class component的后遗症，effect的机制是cleanup每次都会触发，react这样设计的原因是为了减少bugs</p><p>This behavior ensures consistency by default and prevents bugs that are common in class components due to <strong>missing update logic</strong>.
+:::</p><p>官方的例子是关于好友在线状态的，在props更新的情况下，好友A可能被好友B替代，但是如下的例子就会显示好友B在线，但是B可能不在线。</p><pre><code class="language-jsx">  componentDidMount() {
+    ChatAPI.subscribeToFriendStatus(
+      this.props.friend.id,
+      this.handleStatusChange
+    );
+  }
+
+  componentWillUnmount() {
+    ChatAPI.unsubscribeFromFriendStatus(
+      this.props.friend.id,
+      this.handleStatusChange
+    );
+  }
+</code></pre><p>我们可以通过compoentDidUpdate进行解决，判断props变化了之后，关掉前一个好友A的链接，重新建立新好友B的链接，而现实中我们可能经常忘了添加这个逻辑。
+所以用useEffect，每次都会cleanup前一次的记录，然后重新开始effect update。</p><pre><code class="language-jsx">  componentDidMount() {
+    ChatAPI.subscribeToFriendStatus(
+      this.props.friend.id,
+      this.handleStatusChange
+    );
+  }
+
+  componentDidUpdate(prevProps) {
+    // Unsubscribe from the previous friend.id
+    ChatAPI.unsubscribeFromFriendStatus(
+      prevProps.friend.id,
+      this.handleStatusChange
+    );
+    // Subscribe to the next friend.id
+    ChatAPI.subscribeToFriendStatus(
+      this.props.friend.id,
+      this.handleStatusChange
+    );
+  }
+
+  componentWillUnmount() {
+    ChatAPI.unsubscribeFromFriendStatus(
+      this.props.friend.id,
+      this.handleStatusChange
+    );
+  }
+
+</code></pre><h3>2-2. Tip: Optimizing Performance by Skipping Effects</h3><p>In some cases, cleaning up or applying the effect after every render might create a performance problem.
+In class components, we can solve this by writing an extra comparison with prevProps or prevState inside componentDidUpdate</p><pre><code class="language-jsx">componentDidUpdate(prevProps, prevState) {
+  if (prevState.count !== this.state.count) {
+    document.title = `You clicked ${this.state.count} times`;
+  }
+}
+</code></pre><p>在hooks中如何处理呢：</p><pre><code class="language-jsx" metastring="live">function Example() {
+  const [count, setCount] = useState(0);
+  const [count2, setCount2] = useState(100);
+
+  useEffect(() =&gt; {
+    console.log(&#x27;demo3 useEffect running&#x27;);
+    document.title = `You clicked ${count} times`;
+    
+    return () =&gt; {
+      console.log(&#x27;demo3 cleanup running&#x27;);
+    };
+  }, [count]);
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;You clicked {count} times, click {count2} times&lt;/p&gt;
+      &lt;button onClick={() =&gt; setCount(count + 1)}&gt;
+        Click me +
+      &lt;/button&gt;
+      &lt;button onClick={() =&gt; setCount2(count2 - 1)}&gt;
+        Click me -
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre><p>这个例子告诉我们，useEffect只接受count 变化的case，对count2变化是不处理的。当然cleanup也是会处理每次count的更新。而不是接受所有的props更新。
+<strong>也就是通过选择监控的props，过滤掉多余render的触发。</strong></p><h3>2-3. Others</h3><p>:::tip
+If you use this optimization, make sure the array includes all values from the component scope (such as props and state)
+that change over time and that are used by the effect. </p><p>Otherwise, your code will reference stale values from previous renders.
+:::</p><p>:::tip
+If you want to run an effect and clean it up only once (on mount and unmount), you can pass an empty array ([]) as a second argument.
+This tells React that your effect doesn’t depend on any values from props or state, so it never needs to re-run.</p><p>If you pass an empty array ([]), the props and state inside the effect will always have their initial values.
+While passing [] as the second argument is closer to the familiar componentDidMount and componentWillUnmount mental model,</p><p>Also, don’t forget that React defers running useEffect until after the browser has painted, so doing extra work is less of a problem.
+:::</p><h2>3. useLayoutEffect</h2><p>The signature is identical to useEffect, but it fires synchronously after all DOM mutations.
+Use this to read layout from the DOM and synchronously re-render. Updates scheduled inside useLayoutEffect will be flushed synchronously,
+before the browser has a chance to paint.</p><p>我目前的理解，useEffect是异步的，在浏览器渲染完成之后进行。而useLayoutEffect是同步的，在浏览器渲染前更新，是block浏览器渲染进程的。</p><p>useLayoutEffect 无论代码先后都是在useEffect前执行的。</p><pre><code class="language-jsx" metastring="live">function Example() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() =&gt; {
+    console.log(&#x27;demo4 useEffect after render&#x27;);
+    document.title = `You clicked ${count} times`;
+    
+    return ()=&gt;{
+        console.log(&#x27;demo4 cleanup running&#x27;);
+    }
+  });
+
+  useLayoutEffect(() =&gt; {
+    console.log(&#x27;demo4 useLayoutEffect running&#x27;);
+
+    return ()=&gt;{
+        console.log(&#x27;demo4 useLayoutEffect cleanup running&#x27;);
+    }
+  });
+
+  console.log(&#x27;demo4 update DOM&#x27;);
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;You clicked {count} times&lt;/p&gt;
+      &lt;button onClick={() =&gt; setCount(count + 1)}&gt;
+        Click me
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre><p>:::tip
+useEffect 是异步非阻塞调用</p><p>useLayoutEffect 是同步阻塞调用</p><p>useEffect 浏览器绘制后</p><p>useLayoutEffect 在 DOM 变更（React 的更新）后，浏览器绘制前完成所有操作
+:::</p><p>0，7，之后暂停1秒，出现5，说明layoutEffect阻塞了useEffect。</p><pre><code class="language-jsx" metastring="live">function FuncCom () {
+    const [counter, setCounter] = useState(0);
+
+    useEffect(() =&gt; {
+        if (counter === 2) {
+            setCounter(5)
+        }
+    });
+
+    useLayoutEffect(() =&gt; {
+        if (counter === 7) {
+            setTimeout(()=&gt;{
+                setCounter(2)
+            }, 1000);
+        }
+    });
+
+    return (
+        &lt;div style={{fontSize: &#x27;40px&#x27;}}&gt;
+            &lt;button onClick={() =&gt; setCounter(7)}&gt;{counter}&lt;/button&gt;
+        &lt;/div&gt;
+    )
+}
+</code></pre>]]></content>
+        <author>
+            <name>Sheldon Y Sun</name>
+            <uri>https://github.com/777sunny777</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Micro FrontEnd Basic]]></title>
         <id>microFE1</id>
