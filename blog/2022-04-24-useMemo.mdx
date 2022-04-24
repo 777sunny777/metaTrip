@@ -1,0 +1,243 @@
+---
+slug: react2
+title: useMemo and useCallback, you really know it?
+authors: [sheldon]
+tags: [react]
+---
+
+import { useState, useMemo, useCallback } from "react";
+
+:::tip
+- 这篇blog是对useMemo 和 useCallback的深入学习。 
+:::
+
+useMemo 和 useCallback 是react 提供的性能优化工具。用法比较简单，我们在项目中也知道要用，但是具体性能是如何提升的，是不是可以可视化出来，
+相信有很多人并不是特别了解。这篇blog由此而生。
+
+<!--truncate-->
+
+## 1. useMemo
+
+** Returns a memoized value. **
+
+返回一个[缓存值](https://reactjs.org/docs/hooks-reference.html#usememo), 这个是官网对useMemo描述的第一句话。如何理解这个缓存值就很关键，
+实际上官网也提供了对应的维基百科的link。我把关键的面试copy到下面：
+
+:::note
+In computing, memoization or memoisation is an optimization technique used primarily to speed up computer programs by storing
+the results of expensive funtion calls and returning the cached result when the same inputs occur again.
+:::
+
+所以我考虑再三，缓存值还是比较合适的，他的特点就是如果再有相同输入，那么就无需计算，直接返回缓存值即可，从未提升生代码性能。
+
+我们再回到useMemo，Pass a “create” function and an array of dependencies. 
+useMemo will only recompute the memoized value when one of the dependencies has changed. 
+This optimization helps to avoid expensive calculations on every render.
+
+它的参数是一个function(不是回调)和一个依赖数组。数组中的依赖发生变化才会触发函数中的计算。
+如果官网的描述不是很清晰，下面是我从其他blog找到的一段更为清晰的一段useMemo描述。
+
+:::note
+React has a built-in hook called useMemo that allows you to memoize expensive functions 
+so that you can avoid calling them on every render. You simple pass in a function and an array of inputs 
+and useMemo will only recompute the memoized value when one of the inputs has changed.
+:::
+
+使用useMemo需要注意的几点：
+
+:::tip
+1. **Don’t do anything there that you wouldn’t normally do while rendering.** For example, side effects belong in useEffect, not useMemo.
+
+2. If no array is provided, **a new value will be computed on every render**.
+
+3. You may rely on useMemo as a performance optimization, **not as a semantic guarantee**. In the future, React may choose to “forget” some previously memoized values and recalculate them on next render, e.g. to free memory for offscreen components. **Write your code so that it still works without useMemo** — and then add it to optimize performance.
+:::
+
+下面能我们就show case for useMemo，可视化的让大家可以体验一下他的性能提升。
+
+测试方法：
+
+1. 点击Next word，可以感受到由于复杂计算带来的延迟，点击Increment， 由于复杂计算被useMemo优化，所以感受不到延迟影响。
+连续点击效果更明显。
+
+2. 注释掉下面useMemo代码，暴露复杂计算在render过程中。重复上面的动作，点击Increment的时候也出现延迟效果，实际上是不需要的。
+
+
+```jsx live
+
+function TestUseMemo() {
+
+  // State for our counter
+  const [count, setCount] = useState(0);
+  
+  // State to keep track of current word in array we want to show
+  const [wordIndex, setWordIndex] = useState(0);
+  
+  // Words we can flip through and view letter count
+  const words = ["hey", "this", "is", "cool"];
+  const word = words[wordIndex];
+  
+  // Returns number of letters in a word
+  // We make it slow by including a large and completely unnecessary loop
+  const computeLetterCount = (word) => {
+    let i = 0;
+    while (i < 1000000000) i++;
+    return word.length;
+  };
+  
+  // Memoize computeLetterCount so it uses cached return value if input array ...
+  // ... values are the same as last time the function was run.
+  // 针对性的在需要的依赖下进行计算，其他的依赖改变的时候用cache数据，从而提升整体性能
+  const letterCount = useMemo(() => computeLetterCount(word), [word]);
+  
+  // This would result in lag when incrementing the counter because ...
+  // ... we'd have to wait for expensive function when re-rendering.
+  //const letterCount = computeLetterCount(word);
+  
+  return (
+    <div style={{ padding: "15px" }}>
+      <h2>Compute number of letters (slow 🐌)</h2>
+      <p>
+        "{word}" has {letterCount} letters
+      </p>
+      <button
+        onClick={() => {
+          const next = wordIndex + 1 === words.length ? 0 : wordIndex + 1;
+          setWordIndex(next);
+        }}
+      >
+        Next word
+      </button>
+      <h2>Increment a counter (fast ⚡️)</h2>
+      <p>Counter: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+
+```
+
+**所以结论就是在render中的复杂计算，需要useMemo来进行相关依赖下的性能优化。**
+
+## 1. useCallback
+
+** Returns a memoized callback.. **
+
+返回一个[缓存回调](https://reactjs.org/docs/hooks-reference.html#usecallback), 我们可以对比上面的useMemo来看，这次缓存的实际上是我们的函数方法本身。
+
+来看官网的解释，Pass an inline callback and an array of dependencies. 
+useCallback will return a memoized version of the callback that only changes if one of the dependencies has changed. 
+This is useful when passing callbacks to optimized child components that rely on reference equality 
+to prevent unnecessary renders (e.g. shouldComponentUpdate).
+
+和useMemo的描述对比，这里面很明显告诉了我们什么时候用useCallback比较合适，就是shouldComponentUpdate之前什么时候用，现在你就可以考虑用useCallback。
+下面是shouldComponentUpdate的官网描述。
+
+:::note
+Use shouldComponentUpdate() to let React know if a component’s output is not affected by the current change in state or props. 
+The default behavior is to re-render on every state change
+:::
+
+所以他是用来优化限制子组件渲染次数的。如果官网的描述不是很清晰，下面是我从其他blog找到的一段更为清晰的一段useCallback描述。
+
+:::note
+The useCallback hook is used when you have a component in which the child is rerendering again and again without need.
+Pass an inline callback and an array of dependencies. useCallback will return a memoized version of the callback that only changes 
+if one of the dependencies has changed.
+:::
+
+使用useMemo需要注意的几点：
+
+:::tip
+1. useCallback(fn, deps) is equivalent to useMemo(() => fn, deps)
+
+2. useMemo和useCallBack, 在未来的react版本中，第二个参数，依赖数组是会被去掉的
+
+:::
+
+下面能我们就show case for useCallback，可视化的让大家可以体验一下他的性能提升。
+
+测试方法：
+
+1. 代码中的funccount定义为
+```jsx
+let funccount = new Set();
+
+// Set 对象是唯一值的集合，每个值在 Set 中只能出现一次。
+// 如果对Set()定义不是和清楚，可以参考如下测试理解：
+const set1 = new Set();
+
+set1.add(1) 
+set1.add(2)  
+set1.add(3) 
+set1.add(1) 
+
+set1.size // 3
+```
+
+2. 需要F12，看console log的调用次数
+
+3. 点击如下三个按钮，在没有使用useCallBack的时候都是渲染3次累加，说明每次render3个方法都会被重新渲染到。
+
+4. 注释掉原有方法，打开useCallback的方法，再次观察渲染次数，会发现和依赖产生关系，没有触发的子组件也不会被渲染了。
+
+
+```jsx live
+function TestUseCallback() {
+
+  const [count, setCount] = useState(0)
+  const [number, setNumber] = useState(0)
+ 
+  const incrementCounter = () => {
+    setCount(count + 1)
+  }
+  const decrementCounter = () => {
+    setCount(count - 1)
+  }
+   
+   const incrementNumber = () => {
+    setNumber(number + 1)
+  }
+
+  /*
+  const incrementCounter = useCallback(() => {
+    setCount(count + 1)
+  }, [count])
+
+  const decrementCounter = useCallback(() => {
+    setCount(count - 1)
+  }, [count])
+
+  const incrementNumber = useCallback(() => {
+    setNumber(number + 1)
+  }, [number])
+  */ 
+
+  funccount.add(incrementCounter);
+  funccount.add(decrementCounter);
+  funccount.add(incrementNumber);
+  console.log('funccount.size:' + funccount.size);
+ 
+  return (
+    <div>
+      <h2>Count: {count}</h2>
+      <h2>Number: {number}</h2>
+      <button onClick={incrementCounter}>
+         Increase counter
+      </button>
+      <button onClick={decrementCounter}>
+         Decrease Counter
+      </button>
+      <button onClick={incrementNumber}>
+         increase number
+      </button>
+    </div>
+  )
+}
+ 
+
+```
+
+总结就是useCallback针对函数缓存，主要限制子组件的渲染次数
+
+后面我还会对Memo进行一个总结的。

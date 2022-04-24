@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkblog=self.webpackChunkblog||[]).push([[1437],{6582:function(a){a.exports=JSON.parse('{"allTagsPath":"/metaTrip/build/blog/tags","slug":"/metaTrip/build/blog/tags/micro","name":"micro","count":1,"permalink":"/metaTrip/build/blog/tags/micro"}')}}]);

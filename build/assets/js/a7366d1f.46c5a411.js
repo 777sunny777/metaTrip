@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkblog=self.webpackChunkblog||[]).push([[5680],{4006:function(o){o.exports=JSON.parse('{"allTagsPath":"/metaTrip/build/blog/tags","slug":"/metaTrip/build/blog/tags/storybook","name":"storybook","count":2,"permalink":"/metaTrip/build/blog/tags/storybook"}')}}]);
