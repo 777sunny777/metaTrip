@@ -2,11 +2,38 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id> https://777sunny777.github.io/metaTrip/metaTrip/build/blog</id>
     <title>MetaTrip Blog</title>
-    <updated>2022-04-24T00:00:00.000Z</updated>
+    <updated>2022-12-27T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href=" https://777sunny777.github.io/metaTrip/metaTrip/build/blog"/>
     <subtitle>MetaTrip Blog</subtitle>
     <icon> https://777sunny777.github.io/metaTrip/metaTrip/build/img/metaIcon.png</icon>
+    <entry>
+        <title type="html"><![CDATA[npm 快捷键]]></title>
+        <id>npm1</id>
+        <link href=" https://777sunny777.github.io/metaTrip/metaTrip/build/blog/npm1"/>
+        <updated>2022-12-27T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[- 这篇blog是对npm常用命令的一些总结，会持续更新]]></summary>
+        <content type="html"><![CDATA[<p>:::tip</p><ul><li>这篇blog是对npm常用命令的一些总结，会持续更新
+:::</li></ul><h2>1. 常用命令</h2><table><thead><tr><th>命令</th><th>描述</th></tr></thead><tbody><tr><td>npm cache clean --force</td><td>clean npm cache</td></tr><tr><td>npm rm -rf node_modules &amp;&amp; rm package-lock.json</td><td>删除node node_modules文件夹以及lock文件</td></tr><tr><td>npm list</td><td>查看当前目录下已安装的node包</td></tr><tr><td>npm list -g</td><td>查看全局已经安装过的node包</td></tr><tr><td>npm config get prefix</td><td>查看全局安装路径</td></tr><tr><td>npm info</td><td>指定包名 : 查看远程npm上指定包的所有版本信息</td></tr><tr><td>npm root</td><td>查看当前包的安装路径</td></tr><tr><td>npm root -g</td><td>查看全局的包的安装路径</td></tr><tr><td>npm ls 包名</td><td>查看本地安装的指定包及版本信息，没有显示empty</td></tr><tr><td>npm ls包名 -g</td><td>查看全局安装的指定包及版本信息，没有显示empty</td></tr></tbody></table>]]></content>
+        <author>
+            <name>Sheldon Y Sun</name>
+            <uri>https://github.com/777sunny777</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[vscode 快捷键]]></title>
+        <id>vscode1</id>
+        <link href=" https://777sunny777.github.io/metaTrip/metaTrip/build/blog/vscode1"/>
+        <updated>2022-12-27T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[- 这篇blog是对vscode常用功能以及快捷键的一些总结，会持续更新]]></summary>
+        <content type="html"><![CDATA[<p>:::tip</p><ul><li>这篇blog是对vscode常用功能以及快捷键的一些总结，会持续更新
+:::</li></ul><h2>1. typescript版本选择</h2><p>找到vscode中的ts/tsx文件，右下角有typescript当前版本</p><img src="/metaTrip/build/img/blog/vs1.png" alt="" style="width:100%"/><p>点击选择typescript version</p><img src="/metaTrip/build/img/blog/vs2.png" alt="" style="width:100%"/><p>从中进行选择</p><img src="/metaTrip/build/img/blog/vs3.png" alt="" style="width:100%"/><p>在terminal中run npx tsc -v 查看版本，这个版本是当前项目node_module中typescript的版本
+如果是全局下，就是全局安装的版本</p><img src="/metaTrip/build/img/blog/vs4.png" alt="" style="width:100%"/><h2>2. 快捷键</h2><table><thead><tr><th>操作</th><th>描述</th></tr></thead><tbody><tr><td>ctrl + `</td><td>打开或关闭terminal</td></tr><tr><td>ctrl + enter</td><td>向下重开一行；</td></tr><tr><td>ctrl+shift + enter</td><td>则是在上一行重开一行</td></tr><tr><td>ctrl + x</td><td>剪切一行</td></tr><tr><td>ctrl +shift + k</td><td>直接删除一行</td></tr><tr><td>alt + ↑</td><td>向上移动一行</td></tr><tr><td>alt + ↓</td><td>向下移动一行</td></tr><tr><td>ctrl + f</td><td>搜索</td></tr><tr><td>Ctrl + Home</td><td>跳转到页头</td></tr><tr><td>Ctrl + End</td><td>跳转到页尾</td></tr><tr><td>Ctrl + /</td><td>添加关闭行注释</td></tr><tr><td>Shift + Alt +A</td><td>块区域注释</td></tr></tbody></table><h2>3. 有用的插件</h2><p>Git History</p><p>Import Cost</p><p>Markdown Preview Enhance</p>]]></content>
+        <author>
+            <name>Sheldon Y Sun</name>
+            <uri>https://github.com/777sunny777</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[useMemo and useCallback, you really know it?]]></title>
         <id>react2</id>
@@ -168,7 +195,7 @@ set1.size // 3
         <updated>2022-03-30T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[- From B站 桑尼孙先生]]></summary>
         <content type="html"><![CDATA[<p>:::tip</p><ul><li>From B站 桑尼孙先生</li><li>大家快来关注我呀！么么哒！
-:::</li></ul><iframe src="https://www.bilibili.com/video/BV1MQ4y1d7UJ?t=19.1" width="100%" height="800px"></iframe>]]></content>
+:::</li></ul><iframe src="https://www.bilibili.com/video/BV1dL4y1F727?t=19.7" width="100%" height="800px"></iframe>]]></content>
         <author>
             <name>Sheldon Y Sun</name>
             <uri>https://github.com/777sunny777</uri>

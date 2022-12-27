@@ -1,0 +1,28 @@
+---
+slug: npm1
+title: npm 快捷键
+authors: [sheldon]
+tags: [npm]
+---
+
+:::tip
+- 这篇blog是对npm常用命令的一些总结，会持续更新 
+:::
+
+
+<!--truncate-->
+
+## 1. 常用命令
+
+命令 | 描述
+--|--
+npm cache clean --force | clean npm cache
+npm rm -rf node_modules && rm package-lock.json | 删除node node_modules文件夹以及lock文件
+npm list | 查看当前目录下已安装的node包
+npm list -g | 查看全局已经安装过的node包
+npm config get prefix | 查看全局安装路径
+npm info | 指定包名 : 查看远程npm上指定包的所有版本信息
+npm root | 查看当前包的安装路径
+npm root -g | 查看全局的包的安装路径
+npm ls 包名 | 查看本地安装的指定包及版本信息，没有显示empty
+npm ls包名 -g | 查看全局安装的指定包及版本信息，没有显示empty
