@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkblog=self.webpackChunkblog||[]).push([[3129],{87:function(a){a.exports=JSON.parse('{"allTagsPath":"/metaTrip/build/blog/tags","slug":"/metaTrip/build/blog/tags/react-ui-library","name":"react ui library","count":1,"permalink":"/metaTrip/build/blog/tags/react-ui-library"}')}}]);

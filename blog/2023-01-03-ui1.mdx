@@ -1,0 +1,426 @@
+---
+slug: ui1
+title: react ui library 技术总结
+authors: [sheldon]
+tags: [react, react ui library]
+---
+
+:::tip
+- 这篇blog是对所做的一套react ui library技术总结 
+:::
+
+<!--truncate-->
+
+## 1. 当前现状
+
+我从2018年5月到A公司，至今超过4年半，将近5年的时间，其中从19年中旬开始做react ui library，到目前差不多也有3年半左右的经验。
+这期间经历了两套组件库，第二套基于react 16 hooks开发，至今也有三年左右的时间。这次主要讲的也就是第二套。
+
+react组件库其实有很多，比较有名的，google的MUI，推特的bootstrap等等，A公司比较大，制作自己的组件库的原因主要是要符合自身的标准，
+被公司内部的项目使用，这个标准主要有design，和accessibility两种。还有就是一些功能上的例子，直接用三方的往往需要改造，
+并且如果接口不完善，也改造不好，自己做一套才显得更有魄力。
+
+这个项目实际上是没有自有资金的，所以发展的比较缓慢，目前为止直接45个react常用组件，并且支持5种charts类型，体量上趋近于MUI，
+目前服务于14个业务线，这个也是我们比较好的战绩体现。使用组件库可以大幅的减少项目ui的开发时间，这个大家都有认识，这个效率大概是90%。
+
+
+## 2. 框架设计
+
+抱歉我还不能图文并茂的展示内部项目，这里我只能文字性的描述：
+
+1.项目的表现层主要用的到技术是： 
+
+react(16/17 hooks之后)，styled-components, styled system(这两块主要用来写css in js)，
+style dictionary用来管理theme token(它主要是可以将json格式转化成很多文件格式，用以引用)，storybook用来展示case demo，
+docusaurus用来写website 文档，typescript辅助管理接口，react testing library+jest+jest-styled-components 来做UT，
+robot framework+Selenium Library来做auto testing，D3 V7来做charts
+
+
+2.中间层主要用到的技术是：
+
+node js环境，yarn+lerna来管理monoRepo
+
+
+3.代码层主要用到的技术是：
+
+GitHub 存放管理代码，nexus来存放发布ui包
+
+** 下面有会重点总结如下几个关键技术：**
+
+### 2-1. Muti-repo and Monorepo
+
+:::note
+前面说过我做过两套react组件库，第一套使用的是Muti-repo, 第二套使用的是Monorepo
+这两种repo的开发管理模式或者优缺点是什么呢？我根据实际经验和大家聊一下。
+:::
+
+首先提前需要说到的两点是：
+
+1.这两种模式没有优劣，需要根据项目特点，开发需求来定
+2.某种模式下的缺点也是可以尽量弥补的，不是完全解决不了的，不过你需要额外的efforts
+
+
+#### 2-1-1. repo management
+
+对于组件库而言，日常的库管理包括：branch管理，github issue，release changelog，
+readme文件，monorepo相比muti 很容易理解会更加的合适和方便，history search这块应该就见仁见智了
+
+#### 2-1-2. quality control
+
+质量把控方面，cicd/pipeline，这个设置上mono更方便; storybook cases设置上也更容易是一个整体。
+muti-repo一般情况下是分开的，一个repo或者一个组件是单独的storybook cases，
+当然你也可以设置一个大壳子，来整体展示组件，但是就需要额外的开发成本。
+
+这块你可能会问，问什么要把storybook cases 放到一块去好一些？ 组件库是一个整体，不是相互独立的多个组件的集合。
+组件内部的联系远比你想象的多，放在一起可以整体把握impacts，无论是manual check， UT还是auto testing，还是site部署都容易的多。
+
+PR review 也是见仁见智，mono review的成本更大，一个PR 包含信息更多
+muti review PR想多简单一些，但是组件间关联的潜在问题可能无法及时暴漏
+还有公共方法的修改要小心，UT也无法第一时间覆盖到。
+
+#### 2-1-3. release control
+
+muti release更加灵活， package的引用也更加灵活
+mono ui包的组件是同时来release的，影响范围大， release风险相对较高，失败的可能性大
+
+#### 2-1-4. version control
+
+muti 组件间版本依赖问题，嵌套问题，同步问题需要很好的策略来解决，
+npm install需要花费更多时间 
+
+
+### 2-2. npm and yarn
+
+:::note
+第二套使用的yarn来安装管理packages
+
+参考：https://www.knowledgehut.com/blog/web-development/yarn-vs-npm
+:::
+
+首先nodejs是前端开发都会使用的到工具，他是基于V8引擎开发的js runtime ENV。
+
+** NPM：node package manager **，node包管理工具（install，update，manage， remove）这几项。
+他是node的默认工具，安装node的时候就会预安装npm
+
+** Yarn: Yet Another Resource Navigator**, 最早是16年由Facebook开发的另一套nodejs 包管理工具。因为他不是预安装的，所以需要通过npm先进行安装
+
+```jsx
+npm install yarn -g
+```
+
+简单来说yarn促进了npm的发展，比如说yarn是第一个带来版本锁定功能的工具，后面npm也实现了这个功能，
+目前来看两者相比较，yarn的安装速度也更快一些。
+
+先说一些共同点，两者都可以生成lock文件；都支持offline的时候install from cache；都支持workspaces。monorepo的开发模式（npm v7）
+https://docs.npmjs.com/cli/v7/using-npm/workspaces
+都提供了npx，dlx来执行依赖命令，这个可以是还没有安装的依赖。
+
+** NPX：Node package Execute**， （npm v5.2, 有了直接执行，没有会先下载）
+
+然后再说下为啥yarn会比npm快一些：主要有两点，第一个是parallel installation.
+https://blog.csdn.net/yuqing1008/article/details/107328920/
+这个设计到yarn install包的有限队列规则与npm不同，有兴趣大家可以去看文档
+
+第二个就是plug'n'play feature，即插即用功能，yarn v2 才有的
+简单来说，一般npm 会先解析版本，下载到缓存区，解压，再拷贝到项目的node_modules 路径中去，
+如果同一个包版本不同，会嵌套进去再拷贝。
+
+查找的时候是逆着来的，子集里面没有再到root里面的node_modules里查找，这样就有大量的I/O操作
+
+yarn的这个功能，并不会直接把依赖考到项目的node_modules 路径中去，而是在pnp.js 文件中记录下来缓存中具体位置
+这样就避免了大量的I/O操作，同时也不会有node_modules目录生成
+
+
+### 2-3. lerna management
+
+:::note
+lerna是一个管理js monorepo的工具
+:::
+
+简单说几个常用命令：
+
+```jsx
+1.lerna init
+
+//1.安装lerna到devdenpendency
+//2.生成一个lerna.json的config 文件
+
+这里面注意 "version": "independent" 可以各个包发布不同版本
+
+//3. 生成gitignore 如果没有的话
+```
+
+```jsx
+2. lerna bootstrap
+
+//1. npm install
+//2. Symlink
+```
+
+```jsx
+3. lerna changed
+查看package的变化名单
+```
+
+```jsx
+4. lerna version --no-private
+https://github.com/lerna/lerna/tree/main/commands/version#readme
+发布之前更新版本的，可以选择，并且把依赖中的版本也都一起更新了
+
+```
+
+```jsx
+5. lerna publish --no-private
+https://github.com/lerna/lerna/tree/main/commands/publish#readme
+发布package，包含更新版本选择
+```
+
+### 2-4. styled components and styled system
+
+:::note
+styled components css in js的框架
+
+styled system 是快速构建UI的一个辅助工具
+:::
+
+
+这里面主要说一下styled components and styled system 使用中的一些问题
+
+
+#### 2-4-1. insertRule
+
+styled components有一个insertRule 的后面
+默认的时候，development mode是关闭insertRule, 这样你就可以在element的style中看到css inline styles
+在production mode 会打开insertRule， 这样你就看不到了，但是会加快页面加载速度
+
+这个后面是在webpack中配置一个process ENV
+
+```jsx
+// 
+// force the speed false for speedym true for no speedy
+'process.env.REACT_APP_SC_DISABLE_SPEEDY': true
+
+```
+
+我们发现build-storybook的时候找不到inline styles，本地server的时候可以看到，为什么呢？
+其实就是因为storybook是基于webpack的，build-storybook就是production mode了，所以就隐藏了。
+
+<img src="/metaTrip/build/img/blog/b1.png" alt="" style={{width: '100%'}}/>
+
+
+#### 2-4-2. inherits styles
+
+styled components在继承属性这有一个坑，就是“as” prop会改变rendering target，
+比如 styled(Comp)的target 是Comp， styled(div)或者styled.div的target是div，
+如果在styled(Comp)上用as，那么就改变了target到div，也就失去了Comp中的样式继承。
+
+
+官方文档推荐用forwardedAs 来替代就可以了
+https://styled-components.com/docs/api#forwardedas-prop
+
+<img src="/metaTrip/build/img/blog/b2.png" alt="" style={{width: '100%'}}/>
+
+
+#### 2-4-3. priority styles
+
+<img src="/metaTrip/build/img/blog/b3.png" alt="" style={{width: '100%'}}/>
+
+下面的样式优先级应该是：
+
+orange > chocolate > pink > darkgreen > yellow > red > blue
+
+
+#### 2-4-4. flicker
+
+我在做组件库的过程中，在有些组件，比如tooltip，dropdown，datepicker的时候，
+发现页面第一次加载的时候，打开menu，页面中文字会发生抖动现象，
+只有第一次加载后会发生，然后再反复打开关闭menu，就不会发生了。
+
+先说解决思路，排除法找到影响的代码，这些代码往往是menu中的具有styled components样式的组件
+如果把这个组件提前再页面隐藏起来，就没有问题了
+
+可能的原因就是styled components 这种css in js的方式，在组件没有render的时候，对应的inline style
+也没有生成，当打开menu的时候，css inline style生成了，并且插入到了style中，这就产生了页面的重绘，
+如果提前将样式加载进去，就不会产生页面重绘了，也就不会抖动了
+
+### 2-5. Rollup
+
+因为大家对webpack都比较了解，这里面简单说一下rollup。
+https://medium.com/@PepsRyuu/why-i-use-rollup-and-not-webpack-e3ab163f4fd3
+
+Rollup for libraries, webpack for apps.
+这个也不是绝对的，关键还是看需求。
+
+如果项目需要代码拆分，或者有很多静态资源需要处理
+再或者你构建的项目需要引入很多CommonJS模块的依赖，那就应该选择webpack
+
+如果你的代码是基于ES模块的。而且你写的代码希望能够被其他项目直接使用
+那么rollup可能更适合
+
+简单来看下rollup配置
+
+1.input， output.file和output.format都是必传的
+
+```jsx
+// rollup 也支持配置多个文件入口
+
+export default {
+    input: {
+        foo: "./foo.js",
+        bar: "./bar.js"
+    },
+    output: {
+        dir: "dist",
+        format: "cjs"
+    }
+}
+
+```
+
+2.插件的配置比较简单，都是在plugin统一配置的
+
+rollup默认只能加载es6的模块，所以需要commonjs模块，
+我们引用node_mode中的第三方模块，需要用到rollup-plugin-mode-reslove来解析
+
+3.rollup本身不支持启动开发服务器，需要通过第三方插件rollup-plugin-server来启动一个静态服务器
+
+```jsx
+import serve from "rollup-plugin-serve";
+export default {
+    input: "./main.js",
+    output： {
+        file: "dist/bundle.js",
+        format: "iife"
+    },
+    plugins: [serve("dist")]
+}
+
+// 本质上是一个静态资源服务器，因此不支持模块热更新
+```
+
+4.Tree shaking
+
+由于rollup本身支持ES6模块化规范，因此不需要额外配置即可进行tree shaking
+不过如果你需要external依赖，需要注意子集module不会被filter掉，需要自定义
+
+
+### 2-6. style dictionary
+
+style dictionary 是一个theme 管理工具
+他有丰富的接口，可以将json转化成各种项目需要的文档，
+IOS, Android, css, js, html, sass，less 任何你需要的格式
+这其实就为theme tokens的跨平台应用提供了可能。
+https://amzn.github.io/style-dictionary/#/
+
+
+## 3. Design but not Only Design
+
+A公司有自己的一套design的标准，里面大概分两个部分，一个是foundation的部分
+主要包括layout，RS(就是空间变化，padding，margin)，TS(字体变化，包括size，line-height, weight, letter-space),
+breakpoints, color, icon等等。另一个部分就是各个组件的详细设计，但是设计单位都是要按照foundation进行的。
+
+整体是一个theme的话，我们就可以把theme拆分成几个tokens。
+
+1.Design tokens：就是design的基础定义，字体，颜色，空间这些，他们被Seman tokens使用
+
+2.Semantic tokens：就是实际应用的语义，比如cta（default, hover, pressed, disabled），rag( error, warning, success, info)等等
+
+3.UI tokens：组件用到的token， button, radio等等
+
+<img src="/metaTrip/build/img/blog/b4.png" alt="" style={{width: '100%'}}/>
+
+而Design tokens 和 Semantic tokens是可以用style dictionary来进行管理的，这样就实现了跨框架，跨平台的应用
+实际上我们也实现了一个实际的例子，web/ios/Android 公用一套theme toolkit
+
+
+这样设计，还带来了另一个好玩的东西，就是换肤，
+你可以想象，组件逻辑不变，ui token不变，只是Semantic tokens 被不同的design token复写，那么就可以实现一套组件库，不同皮肤功能，
+实际上这个poc也是完成了的。
+
+所以整体上通过style dictionary管理theme，我们可以横向把foudation当作共同资源，跨框架和跨平台使用，纵向上通过换肤，扩展组件库应用范围
+
+## 4. 解耦和重用
+
+### 4-1. UI组件开发的一些特点
+
+#### 4-1-1. 不要加入业务逻辑
+
+这个有的时候并不好分辨，尤其是对于新加的props，比如输入框的验证逻辑，需不需写在组件内部，
+比如nls，那些是组件内部控制的，那些是业务逻辑。立场不同观点也不尽相同。
+但是我们开发组件需要做个决定，而且标准前后要保持一致
+
+#### 4-1-2. 组件接口要具有普遍性
+
+组件接口要适用大部分项目，要尽量简化。
+不增加无意义的接口，比如我们之前iconlink 这个组件有mutiline这个接口，
+就是link中内容在一行和两行中icon 样式不一样，所以先想当然的用mutiline来进行区分。
+
+但是这个接口有意义么？没有意义，因为实际的项目中考虑到响应式布局，以及nls因素，单行和双行是不确定的
+所以这个方法是行不通的
+
+还有个例子，比如notification中title 有两种样式， 我们可以定义两个props, 比如title 用font h1，subtitle 用h2
+但是这就有个问题，首先把title和subtitle font设定死，如果以后再扩展呢？title3？ title4？
+另外我们考虑到title本身除了传string外，还可以是react.node, 所以title接口本身就可以实现title h1和subtitle h2的设计，
+所以我们开始就不需要增加接口，只需要提供case，保持组件内部接口足够灵活和简单。
+
+#### 4-1-3. 高标准
+
+这里面主要说的就是两个标准，design和accessibility
+
+#### 4-1-4. Don't cry over spilt milk
+
+如果写了不好的代码，尤其是接口，就需要继续维护，不能轻易删除
+删除接口就会面临breaking changes，能不能删掉有时候不由组件开发者来决定。还要考虑到项目的影响。
+
+
+#### 4-1-5. unknown impacts
+
+组件的发布，在做好自身质量把控的情况下，还有很多影响是未知的。
+你不知道都有谁在用？你也不知道用户怎么用？
+有时候发布上去，用户更新出了问题才知道，或者除了问题用户也不知道。比如很久之前的功能。
+
+同时impacts也取决与用户更新版本的方式和频率。对于组件库来讲，最好的方式当然是，及时更新最新版本，并且严格使用cases中的标准写法。
+
+
+### 4-2. 解耦是为了提升复用率
+
+组件库内部代码不断演变，以及重构的方向，实际上就是不断解耦以及重用的过程。
+整个组件库，或者说组件生态，会划分为五个级别。
+
+从小到大分别是：逻辑，单个组件，视觉和行为，主题和组件库，以及依赖。
+
+<img src="/metaTrip/build/img/blog/b5.png" alt="" style={{width: '100%'}}/>
+
+#### 4-2-1.逻辑上讲
+
+作为developer，大家自然会去减少代码重复，提取公共变量，公共方法，工具方法等等
+
+#### 4-2-2.组件层面，
+
+react本身的特点是component-based, compose components to build the complex UIs. 所以是一种搭积木的方式，
+由简单到复杂的去进行开发。组件库内部的实现由两种，一种是在基础组件上构建新组件，比如dropdown，datepicker。有点像之前HOC的方式。
+还有一种就是基础组件之间的组合，比如pagenation，iconbutton等等
+
+#### 4-2-3.视觉和行为分离
+
+一个例子，button和link button，如果用composed components 来做，样式上要进行覆盖，代码并不友好。
+划分不干净，后期维护impacts要考虑到button和link button 两个组件范围。实际中，UI视觉是可以有很多变化的，但是button行为，
+以及a11y是要遵循一致性的，也就是native的特点。如果我们这样考虑将两者分类就会很干净。
+
+
+另外也可以反过来，同样的视觉效果，但是行为是完全不一样的，比如pills。所以视觉和行为分离会带来很多好处，对于用户也更加灵活。
+我们导出这些行为的hooks，用户可以直接使用，自定义UI。 类似与table，tooltip 都是如此，比如table，我们专注与UI，用户可以选择或者不用react-table
+都没有问题
+
+#### 4-2-4.主题和组件库分离
+
+这个在前面第三点(Design but not Only Design)有说过，theme是可以独立出来作为共享资源存在的，
+而theme和组件库解绑，也有利于组件库本身的换肤，增大适用范围
+
+#### 4-2-5.依赖
+
+组件库和chart库相互独立，包括开发，发布，下载相互没有依赖，
+增大彼此的发展空间，更大的方向上，目前的组件库受到react版本限制，
+组件库本身的用户有react16，17，还有18。但是我们如何支持18，这个问题会一致存在
+我们如何打破这个限制也是下一步的方向
+
